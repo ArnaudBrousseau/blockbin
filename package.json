@@ -1,0 +1,20 @@
+{
+  "name": "blockbin",
+  "version": "0.0.1",
+  "description": "A distributed Pastebin hosted on the Ethereum blockchain",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ArnaudBrousseau/blockbin"
+  },
+  "author": "Jon Lin, Andrew Hunt, Matt Salesi, Arnaud Brousseau",
+  "license": "Unlicense",
+  "bugs": {
+    "url": "https://github.com/ArnaudBrousseau/blockbin/issues"
+  },
+  "homepage": "https://github.com/ArnaudBrousseau/blockbin/#readme",
+  "dependencies": {
+    "ethereumjs-testrpc": "4.1.3",
+    "http-server": "0.10.0",
+    "truffle": "3.4.9"
+  }
+}
