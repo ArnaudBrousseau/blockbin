@@ -1,0 +1,3 @@
+#!/bin/bash
+echo 'rsyncing to VPS...'
+rsync -avzhr --delete blockbin/ x61@vps363138.ovh.net:/home/x61/sites/blockbin/
