@@ -8,7 +8,10 @@
 - [ ] Tests for realz on a local test network
 - [ ] Write the client app (React)
 - [ ] Upload contract to the blockchain
-- [ ] Buy domain name and deploy client app
+- [x] Buy domain
+- [ ] deploy client app
+- [ ] Deploy HTTPS on blockbin.io
+- [ ] Shield blockbin.io against DDoS? Put the domain behind Cloudflare?
 - [ ] Profit
 
 # Low-level technical work
