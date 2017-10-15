@@ -15,7 +15,7 @@
 - [x] Initialize the contract skeleton with `truffle init`
 - [x] Simple "coming soon" page as UI for now
 - [x] Deploy script to rsync to VPS
-- [ ] Nginx config to serve the coming soon page
-- [ ] Point DNS to server, confirm that coming soon page is up and running
+- [x] Nginx config to serve the coming soon page
+- [x] Point DNS to server, confirm that coming soon page is up and running
 - [ ] Integrate Google Analytics to see traffic trends? Might not jive well with people who don't want to be tracked but heh.
 - [ ] Link icon (`<link rel="apple-touch-icon" href="icon.png">`)
