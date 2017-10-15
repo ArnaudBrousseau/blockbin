@@ -1,5 +1,8 @@
 # Non-technical work
-- [ ] Research if data is actually stored forever on the blockchain. How does this work exactly? Who stores it? Are there deletion mechanisms?
+- [x] Research if data is actually stored forever on the blockchain.
+  How does this work exactly? Who stores it? Nodes running ETH store it
+  Are there deletion mechanisms? No, unless you provide a deletion
+  method in the contract.
 - [ ] Design a logo. Sizes needed: 192x192 (.png), 32x32 (.ico)
 
 # High-level technical work
