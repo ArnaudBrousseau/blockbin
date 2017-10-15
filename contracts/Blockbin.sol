@@ -27,7 +27,7 @@ contract Blockbin {
     }
 
     function empty(bytes32 hash) returns (bool success) {
-        Cube storage cube = allCubes[hash];
+        Cube memory cube = allCubes[hash];
         if (msg.sender != cube.owner) {
             revert();
         }
