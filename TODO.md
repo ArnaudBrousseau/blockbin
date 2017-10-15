@@ -1,12 +1,9 @@
 # Non-technical work
-- [x] Research if data is actually stored forever on the blockchain.
-  How does this work exactly? Who stores it? Nodes running ETH store it
-  Are there deletion mechanisms? No, unless you provide a deletion
-  method in the contract.
+- [x] Research if data is actually stored forever on the blockchain. How does this work exactly? Who stores it? _Nodes running ETH store it_. Are there deletion mechanisms? _No, unless you provide a deletion method in the contract. Even then, the data is virtually still there, it's just that you'll override pointers to it._
 - [ ] Design a logo. Sizes needed: 192x192 (.png), 32x32 (.ico)
 
 # High-level technical work
-- [ ] Create a basic solidity contract to store content
+- [x] Create a basic solidity contract to store content
 - [ ] Write tests for contract
 - [ ] Tests for realz on a local test network
 - [ ] Write the client app (React)
