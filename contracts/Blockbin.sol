@@ -14,7 +14,7 @@ contract Blockbin {
     }
 
     // Main Storage structure for Cubes
-    mapping (bytes32 => Cube) allBlockbins;
+    mapping (bytes32 => Cube) allCubes;
 
 
     modifier onlyAdmin() {
@@ -27,17 +27,17 @@ contract Blockbin {
     }
 
     function empty(bytes32 hash) returns (bool success) {
-        Cube storage cube = allBlockbins[hash];
+        Cube storage cube = allCubes[hash];
         if (msg.sender != cube.owner) {
             revert();
         }
 
-        delete allBlockbins[hash];
+        delete allCubes[hash];
         return true;
     }
 
     function forceEmpty (bytes32 hash) onlyAdmin returns (bool success) {
-        delete allBlockbins[hash];
+        delete allCubes[hash];
         return true;
     }
 
@@ -49,7 +49,7 @@ contract Blockbin {
         blockHash = block.blockhash(blockNumber);
 
         // Store new cube
-        allBlockbins[blockHash] = Cube({
+        allCubes[blockHash] = Cube({
             hash: blockHash,
             owner: msg.sender,
             data: data
@@ -59,6 +59,6 @@ contract Blockbin {
     }
 
     function readCube(bytes32 hash) constant returns (bytes) {
-        return allBlockbins[hash].data;
+        return allCubes[hash].data;
     }
 }
