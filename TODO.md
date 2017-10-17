@@ -4,7 +4,9 @@
 
 # High-level technical work
 - [x] Create a basic solidity contract to store content
-- [ ] Write tests for contract
+- [x] Write basic tests for contract
+- [ ] Write extensive tests for contract
+- [ ] Automate testing by integrating with TravisCI
 - [ ] Tests for realz on a local test network
 - [ ] Write the client app (React)
 - [ ] Upload contract to the blockchain

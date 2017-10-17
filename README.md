@@ -15,7 +15,7 @@ A distributed Pastebin hosted on the Ethereum blockchain.
 
 ## Testing
 
-TODO
+Run `truffle test`
 
 ## Deploying
 

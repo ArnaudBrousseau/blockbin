@@ -8,6 +8,7 @@ contract Blockbin {
 
     // TODO: do we need other fields?
     struct Cube {
+        bool dumped;
         bytes32 hash;
         address owner;
         bytes data;
@@ -41,24 +42,29 @@ contract Blockbin {
         return true;
     }
 
-    function dumpCube(bytes data) returns (bool success) {
-        // Generate a hash
-        uint256 blockNumber;
-        bytes32 blockHash;
-        blockNumber = block.number;
-        blockHash = block.blockhash(blockNumber);
-
-        // Store new cube
-        allCubes[blockHash] = Cube({
-            hash: blockHash,
-            owner: msg.sender,
-            data: data
-        });
-
-        return true;
+    function dumpCube(bytes data, bytes32 hash) returns (bool success) {
+        if (allCubes[hash].dumped) {
+            // A cube with this hash is already stored. Abort.
+            return false;
+        } else {
+            // Proceed to storing new cube
+            allCubes[hash] = Cube({
+                dumped: true,
+                hash: hash,
+                owner: msg.sender,
+                data: data
+            });
+            return true;
+        }
     }
 
     function readCube(bytes32 hash) constant returns (bytes) {
-        return allCubes[hash].data;
+        Cube memory cube = allCubes[hash];
+        if (cube.dumped) {
+            return cube.data;
+        } else {
+            bytes memory emptyBytes;
+            return emptyBytes;
+        }
     }
 }
