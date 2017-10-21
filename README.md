@@ -1,4 +1,4 @@
-# Blockbin [![Build Status](https://travis-ci.org/ArnaudBrousseau/blockbin.svg?branch=master)]
+# Blockbin ![Build Status](https://travis-ci.org/ArnaudBrousseau/blockbin.svg?branch=master)
 
 A distributed Pastebin hosted on the Ethereum blockchain.
 
