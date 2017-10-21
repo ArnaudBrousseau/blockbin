@@ -17,4 +17,7 @@
     "http-server": "0.10.0",
     "truffle": "3.4.9"
   }
+  "scripts": {
+    "test": "truffle test"
+  },
 }

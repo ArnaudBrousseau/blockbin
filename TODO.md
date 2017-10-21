@@ -6,7 +6,7 @@
 - [x] Create a basic solidity contract to store content
 - [x] Write basic tests for contract
 - [ ] Write extensive tests for contract
-- [ ] Automate testing by integrating with TravisCI
+- [x] Automate testing by integrating with TravisCI
 - [ ] Tests for realz on a local test network
 - [ ] Write the client app (React)
 - [ ] Upload contract to the blockchain
