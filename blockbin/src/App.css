@@ -1,0 +1,33 @@
+.App {
+  text-align: left;
+}
+
+.App-center {
+  text-align: center;
+}
+
+.App-header {
+  background-color: #222;
+  padding: 10px;
+  color: white;
+}
+
+.App-textarea {
+  width: 100%;
+  padding: 10px;
+}
+
+.App-title {
+  font-size: 1.5em;
+  display: inline-block;
+}
+
+.App-right {
+  position: absolute;
+  right: 10px;
+}
+
+.App-pagecontainer {
+  max-width: 800px;
+  margin: 0 auto;
+}
