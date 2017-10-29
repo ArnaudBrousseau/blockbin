@@ -1,0 +1,15 @@
+{
+  "short_name": "Blockbin",
+  "name": "Blockbin",
+  "icons": [
+    {
+      "src": "favicon.ico",
+      "sizes": "192x192",
+      "type": "image/png"
+    }
+  ],
+  "start_url": "./index.html",
+  "display": "standalone",
+  "theme_color": "#fe57a1",
+  "background_color": "#ffffff"
+}

@@ -1,0 +1,29 @@
+.app-center {
+  text-align: center;
+}
+
+.inputform-textarea {
+  width: 100%;
+  padding: 10px;
+}
+
+.app-pagecontainer {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.header {
+  background-color: #222;
+  padding: 10px;
+  color: white;
+}
+
+.header-title {
+  font-size: 1.5em;
+  display: inline-block;
+}
+
+.header-right {
+  position: absolute;
+  right: 10px;
+}
