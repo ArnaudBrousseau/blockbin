@@ -1,6 +1,7 @@
-# Blockbin
+# Blockbin ![Build Status](https://travis-ci.org/ArnaudBrousseau/blockbin.svg?branch=master)
 
 A distributed Pastebin hosted on the Ethereum blockchain.
+
 
 ## Hacking locally
 
