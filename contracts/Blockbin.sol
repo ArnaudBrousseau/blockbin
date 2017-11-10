@@ -9,6 +9,7 @@ contract Blockbin {
     // TODO: do we need other fields?
     struct Cube {
         bool dumped;
+        bool softDeleted;
         bytes32 hash;
         address owner;
         bytes data;
@@ -25,6 +26,26 @@ contract Blockbin {
         // Do not forget the "_;"! It will be replaced by the actual function
         // body when the modifier is used.
         _;
+    }
+
+    function softDelete(bytes32 hash) returns (bool success) {
+        Cube memory cube = allCubes[hash];
+        if (msg.sender != cube.owner) {
+            revert();
+        }
+
+        allCubes[hash].softDeleted = true;
+        return true;
+    }
+
+    function softUndelete(bytes32 hash) returns (bool success) {
+        Cube memory cube = allCubes[hash];
+        if (msg.sender != cube.owner) {
+            revert();
+        }
+
+        allCubes[hash].softDeleted = false;
+        return true;
     }
 
     function empty(bytes32 hash) returns (bool success) {
@@ -50,6 +71,7 @@ contract Blockbin {
             // Proceed to storing new cube
             allCubes[hash] = Cube({
                 dumped: true,
+                softDeleted: false,
                 hash: hash,
                 owner: msg.sender,
                 data: data
@@ -60,7 +82,7 @@ contract Blockbin {
 
     function readCube(bytes32 hash) constant returns (bytes) {
         Cube memory cube = allCubes[hash];
-        if (cube.dumped) {
+        if (cube.dumped && !cube.softDeleted) {
             return cube.data;
         } else {
             bytes memory emptyBytes;
