@@ -6,9 +6,8 @@ A distributed Pastebin hosted on the Ethereum blockchain.
 ## Hacking locally
 
 1. Run `testrpc` to get a test network
-2. `truffle compile`
-3. `truffle migrate`
-4. `truffle console` will let you interact with the deployed
+2. `truffle migrate` to compile and deploy to test network
+3. `truffle console` will let you interact with the deployed
    contract. For example:
 
         truffle(development)> bb = Blockbin.deployed()
@@ -16,7 +15,7 @@ A distributed Pastebin hosted on the Ethereum blockchain.
 
 ## Testing
 
-Run `truffle test`
+After starting up the test network, run `truffle test`
 
 ## Deploying
 

@@ -15,6 +15,10 @@ contract Blockbin {
         bytes data;
     }
 
+    function Blockbin() {
+        BlockbinAdmin = msg.sender;
+    }
+
     // Main Storage structure for Cubes
     mapping (bytes32 => Cube) allCubes;
 
@@ -27,6 +31,7 @@ contract Blockbin {
         // body when the modifier is used.
         _;
     }
+
 
     function softDelete(bytes32 hash) returns (bool success) {
         Cube memory cube = allCubes[hash];

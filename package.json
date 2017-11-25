@@ -13,9 +13,10 @@
   },
   "homepage": "https://github.com/ArnaudBrousseau/blockbin/#readme",
   "dependencies": {
-    "ethereumjs-testrpc": "4.1.3",
+    "ethereumjs-testrpc": "^4.1.3",
     "http-server": "0.10.0",
-    "truffle": "3.4.9"
+    "truffle": "3.4.9",
+    "web3": "^1.0.0-beta.24"
   },
   "scripts": {
     "test": "truffle test"
