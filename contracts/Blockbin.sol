@@ -32,7 +32,6 @@ contract Blockbin {
         _;
     }
 
-
     function softDelete(bytes32 hash) returns (bool success) {
         Cube memory cube = allCubes[hash];
         if (msg.sender != cube.owner) {
