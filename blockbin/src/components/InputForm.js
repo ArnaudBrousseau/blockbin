@@ -3,15 +3,21 @@ import Web3 from 'web3';
 
 import '../App.css';
 
+const CONTRACT_ADDRESS = '0xa022cc6ff8895fd07b03c480d46f20c412716fdc';
+
 class InputForm extends Component {
   constructor(props) {
     super(props);
     this.state = {
       pastedText: 'What would you like to put on the ~blockchain~?',
     };
-    if (typeof this.web3 !== 'undefined') {
-      this.web3 = new Web3(this.web3.currentProvider);
+
+    if (typeof window.web3 !== 'undefined') {
+      console.log('using mist or metamask');
+      const newWeb3 = new Web3(window.web3.currentProvider);
+      this.web3 = newWeb3;
     } else {
+      console.log('why aren\'t you using mist or metamask?!');
       // set the provider you want from Web3.providers
       this.web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
     }
@@ -19,7 +25,7 @@ class InputForm extends Component {
     const abi = JSON.parse('[{"constant":true,"inputs":[{"name":"hash","type":"bytes32"}],"name":"readCube","outputs":[{"name":"","type":"bytes"}],"payable":false,"type":"function"},{"constant":false,"inputs":[{"name":"hash","type":"bytes32"}],"name":"softUndelete","outputs":[{"name":"success","type":"bool"}],"payable":false,"type":"function"},{"constant":false,"inputs":[{"name":"hash","type":"bytes32"}],"name":"empty","outputs":[{"name":"success","type":"bool"}],"payable":false,"type":"function"},{"constant":false,"inputs":[{"name":"data","type":"bytes"},{"name":"hash","type":"bytes32"}],"name":"dumpCube","outputs":[{"name":"success","type":"bool"}],"payable":false,"type":"function"},{"constant":false,"inputs":[{"name":"hash","type":"bytes32"}],"name":"softDelete","outputs":[{"name":"success","type":"bool"}],"payable":false,"type":"function"},{"constant":false,"inputs":[{"name":"hash","type":"bytes32"}],"name":"forceEmpty","outputs":[{"name":"success","type":"bool"}],"payable":false,"type":"function"},{"inputs":[],"payable":false,"type":"constructor"}]')
     const BlockbinContract = this.web3.eth.contract(abi);
     // In your nodejs console, execute contractInstance.address to get the address at which the contract is deployed and change the line below to use your deployed address
-    this.contractInstance = BlockbinContract.at('0xa975735b292c2a95e760250148b0aba8dd59d24c');
+    this.contractInstance = BlockbinContract.at(CONTRACT_ADDRESS);
 
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -30,15 +36,26 @@ class InputForm extends Component {
   }
 
   handleSubmit(event) {
-    console.log('hey what up');
     alert('A text was submitted: ' + this.state.pastedText);
     event.preventDefault();
     const cubeBytes = this.web3.fromAscii(this.state.pastedText);
     const contentHash = this.web3.sha3(cubeBytes);
 
-    const txId = this.contractInstance.dumpCube(cubeBytes, contentHash, { from: this.web3.eth.accounts[0], gas: 4000000 })
-    
-    alert('Saved! \nYour transaction id is: ' + txId + '\nYour content hash is: ' + contentHash);
+    // metamask uses accounts[0] to pass the preferred account
+    const txId = this.contractInstance.dumpCube.sendTransaction(
+      cubeBytes, 
+      contentHash, 
+      {
+        from: this.web3.eth.accounts[0], 
+        gas: 2000000,
+      },
+      function(error, result){
+        if(!error)
+          alert('Saved!\nYour lookup hash is: ' + contentHash + '\nYour transaction id is: ' + result);
+        else
+          console.error(error);
+      }
+    );
   }
 
   render() {
