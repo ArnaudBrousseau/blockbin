@@ -15,6 +15,10 @@ contract Blockbin {
         bytes data;
     }
 
+    function Blockbin() {
+        BlockbinAdmin = msg.sender;
+    }
+
     // Main Storage structure for Cubes
     mapping (bytes32 => Cube) allCubes;
 

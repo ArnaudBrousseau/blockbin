@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
-import './App.css';
+
 import Header from './components/Header';
 import InputForm from './components/InputForm';
+
+import './App.css';
 import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
 
 class App extends Component {
