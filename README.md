@@ -3,30 +3,63 @@
 * *Blockbin*: a distributed, Paste*bin*-like app hosted on the Ethereum *block*chain. Hence "blockbin".
 * *Cube*: a blob stored via Blockbin on the Ethereum blockchain
 
+---
+
 ## Hacking locally
 
 ### Requirements
+
+Before you start, make sure you have the following:
 
 * npm: tested with `npm` version 5.6.0
 * node: tested with v8.6.0
 * platform: tested on MacOSX High Sierra, but as long as you can install
   node/npm on your platform you should be set
+* Install the project's dependencies with `npm install`
 
 ### Smart Contract Development
-1. Run `testrpc` to get a test network
-2. `truffle migrate` to compile and deploy the contract to your test network
-3. `truffle console` will let you interact with the deployed
-   contract. For example:
 
-        truffle(development)> bb = Blockbin.deployed()
-        truffle(development)> bb.then(function(instance) { instance.dumpCube('oh hai there');})
+To run your own blockchain locally:
+
+    $ ./node_modules/.bin/testrpc
+
+To compile and deploy the Blockbin contract onto your local blockchain:
+
+    $ ./node_modules/.bin/truffle migrate
+
+To interact and test some contract functions manually:
+
+    $ ./node_modules/.bin/truffle console
+    truffle(development)> bb = Blockbin.deployed()
+    truffle(development)> bb.then(function(instance) { instance.dumpCube('oh hai there');})
 
 ### Webapp development
-Blockbin is built with React. TODO: instructions to run it.
+
+The webapp code lives in `blockbin/`. We use React, so any general React tips
+should apply here as well.
+
+To install the webapp dependencies:
+
+    $ cd blockbin
+    $ npm install
+
+To run a local version of the webapp:
+
+    $ npm start
+
+---
 
 ## Testing
 
-After starting up the test network, run `truffle test`
+First, run a local blockchain:
+
+    $ ./node_modules/.bin/testrpc
+
+Then:
+
+    $ ./node_modules/.bin/truffle test
+
+---
 
 ## Deploying
 
@@ -37,6 +70,8 @@ Run `./bin/deploy`
 ### Smart contract
 
 TODO
+
+---
 
 ## Contributing
 
