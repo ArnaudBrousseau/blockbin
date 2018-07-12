@@ -11,7 +11,7 @@
 
 Before you start, make sure you have the following:
 
-* npm: tested with `npm` version 5.6.0
+* npm: tested with `npm` version 5.10.0
 * node: tested with v8.6.0
 * platform: tested on MacOSX High Sierra, but as long as you can install
   node/npm on your platform you should be set
@@ -46,6 +46,11 @@ To install the webapp dependencies:
 To run a local version of the webapp:
 
     $ npm start
+
+To debug problems with the production bundle:
+
+    $ npm run-script build
+    $ ./node_modules/.bin/serve -s build
 
 ---
 
