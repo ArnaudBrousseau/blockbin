@@ -2,9 +2,8 @@ import React, { Component } from 'react';
 import Web3 from 'web3';
 
 import '../App.css';
+import { createBlockbinContract } from '../util/ethereum';
 
-// TODO: Put in config
-const CONTRACT_ADDRESS = '0xc49f916164a2d47b8934d5454547cc7429ba0c1e';
 
 class InputForm extends Component {
   constructor(props) {
@@ -18,16 +17,13 @@ class InputForm extends Component {
       const newWeb3 = new Web3(window.web3.currentProvider);
       this.web3 = newWeb3;
     } else {
+      // TODO: degrade a bit more gracefully
+      // We don't actually *need* Metamask until we're about to
+      // persist stuff to the blockchain
       alert('Please install Mist or MetaMask to use Blockbin');
     }
 
-    // TODO: move contract creation to different file - util? root component?
-    // Replace with correct ABI
-    const abi = JSON.parse('[{"constant":true,"inputs":[{"name":"hash","type":"bytes32"}],"name":"readCube","outputs":[{"name":"","type":"bytes"}],"payable":false,"type":"function"},{"constant":false,"inputs":[{"name":"hash","type":"bytes32"}],"name":"softUndelete","outputs":[{"name":"success","type":"bool"}],"payable":false,"type":"function"},{"constant":false,"inputs":[{"name":"hash","type":"bytes32"}],"name":"empty","outputs":[{"name":"success","type":"bool"}],"payable":false,"type":"function"},{"constant":false,"inputs":[{"name":"data","type":"bytes"},{"name":"hash","type":"bytes32"}],"name":"dumpCube","outputs":[{"name":"success","type":"bool"}],"payable":false,"type":"function"},{"constant":false,"inputs":[{"name":"hash","type":"bytes32"}],"name":"softDelete","outputs":[{"name":"success","type":"bool"}],"payable":false,"type":"function"},{"constant":false,"inputs":[{"name":"hash","type":"bytes32"}],"name":"forceEmpty","outputs":[{"name":"success","type":"bool"}],"payable":false,"type":"function"},{"inputs":[],"payable":false,"type":"constructor"}]')
-    const BlockbinContract = this.web3.eth.contract(abi);
-    // In your nodejs console, execute contractInstance.address to get the address at which the contract is deployed and change the line below to use your deployed address
-    this.contractInstance = BlockbinContract.at(CONTRACT_ADDRESS);
-
+    this.contractInstance = createBlockbinContract(this.web3);
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
