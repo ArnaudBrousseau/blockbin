@@ -5,48 +5,53 @@ import '../App.css';
 import { createBlockbinContract } from '../util/ethereum';
 
 
+function WarningBanner(props) {
+  if (!props.warn) {
+    return null;
+  }
+
+  return (
+    <div className="warning">
+      Persisting content to the blockchain requires the use of Metamask to fuel the transaction with some ethereum. Go to https://metamask.io/ to install it then refresh this page.
+    </div>
+  );
+}
+
 class InputForm extends Component {
   constructor(props) {
     super(props);
+
     this.state = {
-      pastedText: 'What would you like to put on the ~blockchain~?',
+      content: 'What would you like to put on the ~blockchain~?',
     };
 
     if (typeof window.web3 !== 'undefined') {
-      console.log('using mist or metamask');
-      const newWeb3 = new Web3(window.web3.currentProvider);
-      this.web3 = newWeb3;
+      this.web3 = new Web3(window.web3.currentProvider);
     } else {
-      // TODO: degrade a bit more gracefully
-      // We don't actually *need* Metamask until we're about to
-      // persist stuff to the blockchain
-      alert('Please install Mist or MetaMask to use Blockbin');
+      this.web3 = undefined;
     }
 
-    this.contractInstance = createBlockbinContract(this.web3);
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
   handleChange(event) {
-    this.setState({ pastedText: event.target.value })
+    this.setState({ content: event.target.value })
   }
 
   handleSubmit(event) {
-    alert('A text was submitted: ' + this.state.pastedText);
     event.preventDefault();
-    const cubeBytes = this.web3.fromAscii(this.state.pastedText);
+    const cubeBytes = this.web3.fromAscii(this.state.content);
     const contentHash = this.web3.sha3(cubeBytes);
-    const contractInstance = this.contractInstance;
-    const web3 = this.web3;
+    const contractInstance = createBlockbinContract(this.web3);
 
     function submitTx(gasEstimate) {
-      // metamask uses accounts[0] to pass the preferred account
+      // Metamask uses accounts[0] to pass the preferred account
       contractInstance.dumpCube.sendTransaction(
-        cubeBytes, 
-        contentHash, 
+        cubeBytes,
+        contentHash,
         {
-          from: web3.eth.accounts[0], 
+          from: this.web3.eth.accounts[0],
           gas: gasEstimate,
         },
         function(error, result){
@@ -77,19 +82,24 @@ class InputForm extends Component {
   }
 
   render() {
+    const doesNotHaveWeb3 = this.web3 === undefined;
     return (
       <form onSubmit={this.handleSubmit}>
         <h3>
           Paste content below to post to Blockbin:
         </h3>
-        <textarea 
+        <textarea
           className="inputform-textarea"
           onChange={this.handleChange}
-          value={this.state.pastedText}
+          value={this.state.content}
           rows={10}
         />
-        <button className="btn btn-primary">
-          Submit
+        <WarningBanner warn={doesNotHaveWeb3} />
+        <button
+          className="btn btn-primary"
+          disabled={doesNotHaveWeb3 ? 'disabled' : ''}
+        >
+          Write it to the blockchain (cannot be undone!)
         </button>
       </form>
     );
