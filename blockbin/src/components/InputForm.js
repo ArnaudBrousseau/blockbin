@@ -86,7 +86,7 @@ class InputForm extends Component {
     return (
       <form onSubmit={this.handleSubmit}>
         <h3>
-          Paste content below to post to Blockbin:
+          New Cube:
         </h3>
         <textarea
           className="inputform-textarea"
