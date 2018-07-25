@@ -3,8 +3,15 @@ node_js:
   - "8"
 
 before_script:
-  - testrpc &
+  - npm install --prefix=dapp
+  - npm install --prefix=webapp
+  - npm run ethereum --prefix=dapp
+
+script:
+  - npm run test --prefix=dapp
+  - npm run test --prefix=webapp
 
 cache:
   directories:
-    - "node_modules"
+    - "webapp/node_modules"
+    - "dapp/node_modules"
