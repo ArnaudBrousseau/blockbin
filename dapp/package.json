@@ -22,6 +22,10 @@
   },
   "scripts": {
     "ethereum": "testrpc",
-    "test": "truffle test"
+    "test": "truffle test",
+    "deploy": "truffle migrate --reset && truffle exec scripts/deploy_contract.js"
+  },
+  "devDependencies": {
+    "truffle-contract": "^3.0.6"
   }
 }

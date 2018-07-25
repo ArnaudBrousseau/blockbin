@@ -28,8 +28,7 @@ To run your own blockchain locally:
 
 To compile and deploy the Blockbin contract onto your local blockchain:
 
-    $ cd dapp
-    $ ./node_modules/.bin/truffle migrate
+    $ npm run deploy --prefix=dapp
 
 To interact and test some contract functions manually:
 
