@@ -86,7 +86,7 @@ class InputForm extends Component {
     return (
       <form onSubmit={this.handleSubmit}>
         <h3>
-          New Cube:
+          Cube content:
         </h3>
         <textarea
           className="inputform-textarea"
@@ -99,7 +99,7 @@ class InputForm extends Component {
           className="btn btn-primary"
           disabled={doesNotHaveWeb3 ? 'disabled' : ''}
         >
-          Write it to the blockchain (cannot be undone!)
+          Save to blockchain
         </button>
       </form>
     );

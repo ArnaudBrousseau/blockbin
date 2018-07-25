@@ -1,6 +1,6 @@
 .header {
   display: block;
-  box-shadow: 0px 2px 2px 0px rgba(0, 0, 0, .3);
+  box-shadow: 0px 2px 2px 0px rgba(0,0,0,0.3);
 }
 
 .header-link {
@@ -26,6 +26,9 @@
   width: 100%;
   padding: 10px;
   border-radius: 2px;
+  font-family: Consolas, Courier, monospace;
+  font-weight: 700;
+  font-size: 14px;
 }
 
 .app-pagecontainer {
