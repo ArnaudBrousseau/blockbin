@@ -1,6 +1,6 @@
 # Non-technical work
 - [x] Research if data is actually stored forever on the blockchain. How does this work exactly? Who stores it? _Nodes running ETH store it_. Are there deletion mechanisms? _No, unless you provide a deletion method in the contract. Even then, the data is virtually still there, it's just that you'll override pointers to it._
-- [ ] Design a logo. Sizes needed: 192x192 (.png), 32x32 (.ico)
+- [x] Design a logo. Sizes needed: 192x192 (.png), 32x32 (.ico)
 
 # High-level technical work
 - [x] Create a basic solidity contract to store content
@@ -24,4 +24,4 @@
 - [x] Nginx config to serve the coming soon page
 - [x] Point DNS to server, confirm that coming soon page is up and running
 - [ ] Integrate Google Analytics to see traffic trends? Might not jive well with people who don't want to be tracked but heh.
-- [ ] Link icon (`<link rel="apple-touch-icon" href="icon.png">`)
+- [x] Link icon (`<link rel="apple-touch-icon" href="icon.png">`)
