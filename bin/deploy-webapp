@@ -1,6 +1,6 @@
 #!/bin/bash
 echo 'building webapp for production...'
-npm run --prefix blockbin build
+npm run --prefix webapp build
 echo 'rsyncing to VPS...'
-rsync -avzhr --delete blockbin/build x61@vps363138.ovh.net:/home/x61/sites/blockbin/
+rsync -avzhr --delete webapp/build x61@vps363138.ovh.net:/home/x61/sites/blockbin/
 echo '...Done! Head to blockbin.io to check the result.'

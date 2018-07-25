@@ -1,7 +1,7 @@
 {
   "name": "blockbin",
   "version": "0.0.1",
-  "description": "A distributed Pastebin hosted on the Ethereum blockchain",
+  "description": "A smart contract implementing a distributed Pastebin hosted on the Ethereum blockchain",
   "repository": {
     "type": "git",
     "url": "https://github.com/ArnaudBrousseau/blockbin"
@@ -21,6 +21,7 @@
     "web3": "^0.20.3"
   },
   "scripts": {
+    "ethereum": "testrpc",
     "test": "truffle test"
   }
 }

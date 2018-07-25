@@ -1,7 +1,7 @@
 # Blockbin ![Build Status](https://travis-ci.org/ArnaudBrousseau/blockbin.svg?branch=master)
 
-* *Blockbin*: a distributed, Paste*bin*-like app hosted on the Ethereum *block*chain. Hence "blockbin".
-* *Cube*: a blob stored via Blockbin on the Ethereum blockchain
+* *Blockbin*: a website to let anybody store content in the Ethereum blockchain. It's a Paste*bin*-like app hosted on the Ethereum *block*chain. Hence "blockbin".
+* *Cube*: (also refered to as "qb") a blob stored via Blockbin on the Ethereum blockchain
 
 ---
 
@@ -15,20 +15,25 @@ Before you start, make sure you have the following:
 * node: tested with v8.6.0
 * platform: tested on MacOSX High Sierra, but as long as you can install
   node/npm on your platform you should be set
-* Install the project's dependencies with `npm install`
 
 ### Smart Contract Development
 
+To install the dapp dependencies:
+
+    $ npm install --prefix=dapp
+
 To run your own blockchain locally:
 
-    $ ./node_modules/.bin/testrpc
+    $ npm run ethereum --prefix=dapp
 
 To compile and deploy the Blockbin contract onto your local blockchain:
 
+    $ cd dapp
     $ ./node_modules/.bin/truffle migrate
 
 To interact and test some contract functions manually:
 
+    $ cd dapp
     $ ./node_modules/.bin/truffle console
     truffle(development)> bb = Blockbin.deployed()
     truffle(development)> bb.then(function(instance) { instance.dumpCube('oh hai there');})
@@ -40,29 +45,31 @@ should apply here as well.
 
 To install the webapp dependencies:
 
-    $ cd blockbin
-    $ npm install
+    $ npm install --prefix=webapp
 
 To run a local version of the webapp:
 
-    $ npm start
+    $ npm start --prefix=webapp
 
 To debug problems with the production bundle:
 
-    $ npm run-script build
+    $ npm run-script build --prefix=webapp
+    $ cd webapp
     $ ./node_modules/.bin/serve -s build
 
 ---
 
 ## Testing
 
-First, run a local blockchain:
+To test the dapp:
 
-    $ ./node_modules/.bin/testrpc
+    $ npm run ethereum --prefix=dapp
+    # In another shell:
+    $ npm run test --prefix=dapp
 
-Then:
+To test the webapp:
 
-    $ ./node_modules/.bin/truffle test
+    $ npm run test --prefix=webapp
 
 ---
 
@@ -70,7 +77,7 @@ Then:
 
 ### Webapp
 
-Run `./bin/deploy`
+Run `./bin/deploy-webapp`
 
 ### Smart contract
 
