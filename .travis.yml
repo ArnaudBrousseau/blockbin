@@ -5,7 +5,7 @@ node_js:
 before_script:
   - npm install --prefix=dapp
   - npm install --prefix=webapp
-  - npm run ethereum --prefix=dapp
+  - npm run ethereum --prefix=dapp &
 
 script:
   - npm run test --prefix=dapp
