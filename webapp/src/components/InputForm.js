@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
-import Web3 from 'web3';
+import { createBlockbinContract } from '../util/ethereum';
 
 import '../App.css';
-import { createBlockbinContract } from '../util/ethereum';
 
 
 function WarningBanner(props) {
@@ -26,7 +25,10 @@ class InputForm extends Component {
     };
 
     if (typeof window.web3 !== 'undefined') {
-      this.web3 = new Web3(window.web3.currentProvider);
+      // TODO: replace this with an imported version of web3
+      // e.g. import 'Web3' from 'web3'; new Web3(...)
+      // For some reason webpack makes this hard?
+      this.web3 = new window.Web3(window.web3.currentProvider);
     } else {
       this.web3 = undefined;
     }
@@ -65,14 +67,18 @@ class InputForm extends Component {
       );
     }
 
-    this.contractInstance.dumpCube.estimateGas(
-      cubeBytes, 
-      contentHash, 
-      { from: this.web3.eth.accounts[0] },
+    // TODO: refactor `this` out. Nested functions are just ugly and hard to
+    // reason about.
+    const that = this
+
+    contractInstance.dumpCube.estimateGas(
+      cubeBytes,
+      contentHash,
+      { from: that.web3.eth.accounts[0] },
       function(error, result){
         if (!error) {
           console.log('gas estimate: ' + result);
-          submitTx(result);
+          submitTx.call(that, result);
         } else {
           console.error('not able to estimate gas. error msg: ' + error);
           return;

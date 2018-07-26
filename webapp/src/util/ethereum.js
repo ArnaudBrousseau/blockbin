@@ -7,9 +7,7 @@
 var createBlockbinContract = function(web3) {
     const abi = JSON.parse(process.env.REACT_APP_BLOCKBIN_ABI);
     const contract = web3.eth.contract(abi);
-    contract.at(process.env.REACT_APP_CONTRACT_ADDRESS);
+    return contract.at(process.env.REACT_APP_CONTRACT_ADDRESS);
 };
 
-module.exports = {
-    'createBlockbinContract': createBlockbinContract,
-};
+export { createBlockbinContract };
