@@ -21,7 +21,7 @@
     "web3": "^0.20.3"
   },
   "scripts": {
-    "ethereum": "testrpc",
+    "ethereum": "./start-ethereum.sh",
     "test": "truffle test",
     "deploy": "truffle migrate --reset && truffle exec scripts/deploy_contract.js"
   },

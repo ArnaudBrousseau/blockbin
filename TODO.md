@@ -7,9 +7,9 @@
 - [x] Write basic tests for contract
 - [ ] Write extensive tests for contract
 - [x] Automate testing by integrating with TravisCI
-- [ ] Tests for realz on a local test network
+- [x] Tests for realz on a local test network
 - [x] Write the client app (React)
-- [ ] Revamp of client app
+- [x] Revamp of client app
 - [ ] Upload contract to the blockchain
 - [x] Buy domain
 - [ ] deploy client app

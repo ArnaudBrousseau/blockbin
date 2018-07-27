@@ -22,9 +22,13 @@ To install the dapp dependencies:
 
     $ npm install --prefix=dapp
 
-To run your own blockchain locally:
+To run your own blockchain locally (and more importantly: to setup an account with some ether to be able to perform transactions):
 
-    $ npm run ethereum --prefix=dapp
+* Download [Metamask](https://metamask.io/)
+* (one-time only): `cd dapp && node_modules/.bin/testrpc`, then create a Metamask account while pointing at this network ("Localhost 8545").
+* (one-time only): in Metamask, click on "..." next to your account, then "Export Private Key". Save it somewhere!
+* (one-time only): shut down your private network
+* Run `npm run ethereum --prefix=dapp`. This should prompt you for your private key and will start the network with your account provisioned with 300 ETH, enough to perform loads of transactions!
 
 To compile and deploy the Blockbin contract onto your local blockchain:
 

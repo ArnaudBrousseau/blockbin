@@ -91,7 +91,7 @@ class InputForm extends Component {
 
   sendTransactionCb(error, result) {
     if (!error) {
-      alert('Saved!\nYour lookup hash is: ' + this.contentHash + '\nYour transaction id is: ' + result);
+      alert('Saved!\nYour lookup hash is: ' + this.state.contentHash + '\nYour transaction id is: ' + result);
     } else {
       console.error(error);
       alert('Error in processing your transaction');
