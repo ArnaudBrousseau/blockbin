@@ -21,7 +21,10 @@ class InputForm extends Component {
     super(props);
 
     this.state = {
-      content: 'What would you like to put on the ~blockchain~?',
+      content: '',
+      estimate: 'n/a',
+      contentHash: 'n/a',
+      cubeBytes: '0x'
     };
 
     if (typeof window.web3 !== 'undefined') {
@@ -33,59 +36,67 @@ class InputForm extends Component {
       this.web3 = undefined;
     }
 
+    this.contractInstance = createBlockbinContract(this.web3);
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
   handleChange(event) {
-    this.setState({ content: event.target.value })
+    const content = event.target.value;
+    // TODO: what about emojis or other types of content?
+    // I don't think we should assume `this.state.content` to be ascii in the
+    // first place...
+    const cubeBytes = this.web3.fromAscii(content);
+    const contentHash = this.web3.sha3(cubeBytes);
+
+    this.setState({
+        content: content,
+        cubeBytes: cubeBytes,
+        contentHash: contentHash
+    })
+
+    this.contractInstance.dumpCube.estimateGas(
+      this.state.cubeBytes,
+      this.state.contentHash,
+      // TODO: seems like this has a lot of assumptions baked in
+      // why would we grab the first available account?
+      { from: this.web3.eth.accounts[0] },
+      this.estimateGasCb.bind(this)
+    );
   }
+
+  estimateGasCb(error, result) {
+    if (!error) {
+      this.setState({estimate: result});
+    } else {
+      console.error('not able to estimate gas. error msg: ' + error);
+      return;
+    }
+  };
 
   handleSubmit(event) {
     event.preventDefault();
-    const cubeBytes = this.web3.fromAscii(this.state.content);
-    const contentHash = this.web3.sha3(cubeBytes);
-    const contractInstance = createBlockbinContract(this.web3);
 
-    function submitTx(gasEstimate) {
-      // Metamask uses accounts[0] to pass the preferred account
-      contractInstance.dumpCube.sendTransaction(
-        cubeBytes,
-        contentHash,
-        {
-          from: this.web3.eth.accounts[0],
-          gas: gasEstimate,
-        },
-        function(error, result){
-          if (!error) {
-            alert('Saved!\nYour lookup hash is: ' + contentHash + '\nYour transaction id is: ' + result);
-          } else {
-            console.error(error);
-            alert('Error in processing your transaction');
-          }
-        }
-      );
-    }
-
-    // TODO: refactor `this` out. Nested functions are just ugly and hard to
-    // reason about.
-    const that = this
-
-    contractInstance.dumpCube.estimateGas(
-      cubeBytes,
-      contentHash,
-      { from: that.web3.eth.accounts[0] },
-      function(error, result){
-        if (!error) {
-          console.log('gas estimate: ' + result);
-          submitTx.call(that, result);
-        } else {
-          console.error('not able to estimate gas. error msg: ' + error);
-          return;
-        }
-      }
+    this.contractInstance.dumpCube.sendTransaction(
+      this.state.cubeBytes,
+      this.state.contentHash,
+      {
+        // Metamask uses accounts[0] to pass the preferred account
+        from: this.web3.eth.accounts[0],
+        gas: this.state.estimate,
+      },
+      this.sendTransactionCb.bind(this)
     );
   }
+
+  sendTransactionCb(error, result) {
+    if (!error) {
+      alert('Saved!\nYour lookup hash is: ' + this.contentHash + '\nYour transaction id is: ' + result);
+    } else {
+      console.error(error);
+      alert('Error in processing your transaction');
+    }
+  };
 
   render() {
     const doesNotHaveWeb3 = this.web3 === undefined;
@@ -95,17 +106,23 @@ class InputForm extends Component {
           Cube content:
         </h3>
         <textarea
-          className="inputform-textarea"
+          className="inputform-textarea nerdy"
           onChange={this.handleChange}
           value={this.state.content}
           rows={10}
         />
+
         <WarningBanner warn={doesNotHaveWeb3} />
+
+        <h4 className="cube-info nerdy">Length: {(this.state.cubeBytes.length-2)/2} bytes</h4>
+        <h4 className="cube-info nerdy">Gas estimate: {this.state.estimate}</h4>
+        <h4 className="cube-info nerdy">SHA3: {this.state.contentHash.substr(0,10) + '...'}</h4>
+
         <button
-          className="btn btn-primary"
+          className="submit-button"
           disabled={doesNotHaveWeb3 ? 'disabled' : ''}
         >
-          Save to blockchain
+          Mine to blockchain
         </button>
       </form>
     );
