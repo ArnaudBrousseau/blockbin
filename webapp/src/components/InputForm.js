@@ -32,11 +32,12 @@ class InputForm extends Component {
       // e.g. import 'Web3' from 'web3'; new Web3(...)
       // For some reason webpack makes this hard?
       this.web3 = new window.Web3(window.web3.currentProvider);
+      this.contractInstance = createBlockbinContract(this.web3);
     } else {
       this.web3 = undefined;
+      this.contractInstance = undefined;
     }
 
-    this.contractInstance = createBlockbinContract(this.web3);
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
