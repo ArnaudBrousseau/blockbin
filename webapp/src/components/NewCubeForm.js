@@ -16,7 +16,7 @@ function WarningBanner(props) {
   );
 }
 
-class InputForm extends Component {
+class NewCubeForm extends Component {
   constructor(props) {
     super(props);
 
@@ -103,11 +103,11 @@ class InputForm extends Component {
     const doesNotHaveWeb3 = this.web3 === undefined;
     return (
       <form onSubmit={this.handleSubmit}>
-        <h3>
-          Cube content:
+        <h3 className="new-cube-title">
+          New Cube
         </h3>
         <textarea
-          className="inputform-textarea nerdy"
+          className="new-cube-textarea nerdy"
           onChange={this.handleChange}
           value={this.state.content}
           rows={10}
@@ -130,4 +130,4 @@ class InputForm extends Component {
   }
 }
 
-export default InputForm;
+export default NewCubeForm;

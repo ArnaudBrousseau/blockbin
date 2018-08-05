@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 
 import Header from './Header';
-import InputForm from './InputForm';
+import NewCubeForm from './NewCubeForm';
 
 
 class Home extends Component {
@@ -10,7 +10,7 @@ class Home extends Component {
       <div>
         <Header />
         <div className="app-pagecontainer">
-          <InputForm />
+          <NewCubeForm />
         </div>
       </div>
     );
