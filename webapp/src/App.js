@@ -1,20 +1,21 @@
 import React, { Component } from 'react';
+import { BrowserRouter as Router, Route } from "react-router-dom";
 
-import Header from './components/Header';
-import InputForm from './components/InputForm';
-
+import Home from "./components/Home";
+import Cube from "./components/Cube";
 import './App.css';
+
 
 class App extends Component {
   render() {
     return (
-      <div>
-        <Header />
-        <div className="app-pagecontainer">
-          <InputForm />
+      <Router>
+        <div>
+          <Route path="/" component={Home} />
+          <Route path="/cube/:cubeId" component={Cube} />
         </div>
-      </div>
-    );
+      </Router>
+    )
   }
 }
 
