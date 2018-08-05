@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
 import { createBlockbinContract } from '../util/ethereum';
 
-import '../App.css';
-
 
 function WarningBanner(props) {
   if (!props.warn) {

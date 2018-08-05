@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-import '../App.css';
+import ShowCubeForm from './ShowCubeForm';
 
 class Header extends Component {
   render() {
@@ -10,13 +10,7 @@ class Header extends Component {
           <a href="/" className="header-link">
             <h1 className="header-title">Blockbin</h1>
           </a>
-          <form className="header-form">
-            <label>
-              Cube SHA
-              <input type="text" name="sha" className="header-input" />
-            </label>
-            <button className="header-submit-button">Show</button>
-          </form>
+          <ShowCubeForm />
         </div>
       </header>
     );
