@@ -1,29 +1,26 @@
 import React, { Component } from 'react';
-import { Redirect } from "react-router-dom";
+import { withRouter } from 'react-router-dom'
 
 
 class ShowCubeForm extends Component {
   constructor(props) {
     super(props);
-    this.state = { value: '', cubeURL: undefined };
+    this.state = {
+      value: '0x...',
+      cubeURL: undefined,
+      shouldRedirect: false
+    };
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
   isValidSHA3(str) {
-    // TODO: refine this :)
-    return !!str;
+    return /^0x[0-9abcdef]{64}$/.test(str);
   }
 
   handleSubmit(e) {
     e.preventDefault();
-
-    if (this.isValidSHA3(this.state.value)) {
-      this.setState({
-        value: this.state.value,
-        cubeURL: '/cube/' + this.state.value
-      });
-    }
+    this.props.history.push('/cube/' + this.state.value);
   }
 
   handleChange(e) {
@@ -31,19 +28,18 @@ class ShowCubeForm extends Component {
   }
 
   render() {
-    if (this.state.cubeURL) {
-      return <Redirect to={this.state.cubeURL} />;
-    }
+    var isValidSHA3 = this.isValidSHA3(this.state.value);
+
     return (
       <form className="header-form" onSubmit={this.handleSubmit}>
         <label>
           Cube SHA
           <input type="text" value={this.state.value} onChange={this.handleChange} name="sha" className="header-input" />
         </label>
-        <button className="header-submit-button">Show</button>
+        <button className="header-submit-button" disabled={isValidSHA3 ? '' : 'disabled'}>Show</button>
       </form>
     );
   }
-}
+};
 
-export default ShowCubeForm;
+export default withRouter(ShowCubeForm);
