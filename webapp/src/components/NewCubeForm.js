@@ -115,7 +115,7 @@ class NewCubeForm extends Component {
 
         <h4 className="cube-info nerdy faded">Length: {(this.state.cubeBytes.length-2)/2} bytes</h4>
         <h4 className="cube-info nerdy faded">Gas estimate: {this.state.estimate}</h4>
-        <h4 className="cube-info nerdy faded">SHA3: {this.state.contentHash}</h4>
+        <h4 className="cube-info nerdy faded">Hash: {this.state.contentHash}</h4>
 
         <button
           className="submit-button"
