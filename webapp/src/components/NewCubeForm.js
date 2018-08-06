@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
 import { createBlockbinContract } from '../util/ethereum';
 
+const SUPPORTED_CODECS = {
+  'ASCII': 'ascii'
+};
 
 function SuccessBanner(props) {
   if (!props.successes || !props.successes.length) {
@@ -33,9 +36,9 @@ function WarningBanner(props) {
 class NewCubeForm extends Component {
   constructor(props) {
     super(props);
-
     this.state = {
       content: '',
+      codec: SUPPORTED_CODECS.ASCII,
       estimate: 'n/a',
       contentHash: 'n/a',
       cubeBytes: '0x',
@@ -62,12 +65,17 @@ class NewCubeForm extends Component {
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
+  encode(content, codec) {
+    if (codec === SUPPORTED_CODECS.ASCII) {
+      return this.web3.fromAscii(content);
+    } else {
+      throw new Error('Unsupported codec: ' + codec);
+    }
+  };
+
   handleChange(event) {
     const content = event.target.value;
-    // TODO: what about emojis or other types of content?
-    // I don't think we should assume `this.state.content` to be ascii in the
-    // first place...
-    const cubeBytes = this.web3.fromAscii(content);
+    const cubeBytes = this.encode(content, this.state.codec)
     const contentHash = this.web3.sha3(cubeBytes);
 
     this.setState({
@@ -143,6 +151,12 @@ class NewCubeForm extends Component {
 
         <h3 className="app-title app-title-bigger">
           New Cube
+          <div className="codec-select">
+              <label htmlFor="codec">Encoding</label>
+              <select id="codec">
+                <option value="ascii">ASCII</option>
+              </select>
+          </div>
         </h3>
         <textarea
           className="new-cube-textarea nerdy"

@@ -78,6 +78,19 @@
   font-size: 18px;
 }
 
+.codec-select {
+  font-size: 14px;
+  font-weight: normal;
+  float: right;
+  margin-top: 4px;
+  margin-right: -21px;
+}
+
+.codec-select label {
+  padding-right: 4px;
+}
+
+
 .new-cube-textarea {
   width: 100%;
   padding: 10px;
@@ -121,6 +134,14 @@
   font-size: 14px;
   border: 1px #666 solid;
   margin-bottom: 10px;
+  position: relative;
+}
+.cube-display-codec {
+  position: absolute;
+  left: 10px;
+  top: -7px;
+  background-color: white;
+  font-size: 12px;
 }
 
 .faded { color: #666; }

@@ -50,10 +50,12 @@ class Cube extends Component {
       <div className="app-pagecontainer">
           <h3 className="app-title nerdy">@{this.state.hash}</h3>
           <div className="cube-display nerdy">
-            {window.web3.toAscii(this.state.content)}
-          </div>
-          <div className="cube-display nerdy faded">
+            <span className="cube-display-codec faded">Bytes</span>
             {this.state.content}
+          </div>
+          <div className="cube-display nerdy">
+            <span className="cube-display-codec faded">ASCII</span>
+            {window.web3.toAscii(this.state.content)}
           </div>
           <div className="cube-error">{this.state.error}</div>
       </div>
