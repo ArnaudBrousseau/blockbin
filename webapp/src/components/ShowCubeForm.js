@@ -14,7 +14,7 @@ class ShowCubeForm extends Component {
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-  isValidSHA3(str) {
+  isValidHash(str) {
     return /^0x[0-9abcdef]{64}$/.test(str);
   }
 
@@ -28,15 +28,15 @@ class ShowCubeForm extends Component {
   }
 
   render() {
-    var isValidSHA3 = this.isValidSHA3(this.state.value);
+    var isValidHash = this.isValidHash(this.state.value);
 
     return (
       <form className="header-form" onSubmit={this.handleSubmit}>
         <label>
-          Cube SHA
+          Hash
           <input type="text" value={this.state.value} onChange={this.handleChange} name="sha" className="header-input" />
         </label>
-        <button className="header-submit-button" disabled={isValidSHA3 ? '' : 'disabled'}>Show</button>
+        <button className="header-submit-button" disabled={isValidHash ? '' : 'disabled'}>Show</button>
       </form>
     );
   }
