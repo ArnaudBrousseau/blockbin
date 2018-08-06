@@ -115,6 +115,7 @@
 }
 
 .cube-display {
+  width: 100%;
   padding: 10px;
   border-radius: 2px;
   font-size: 14px;

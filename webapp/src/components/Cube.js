@@ -6,7 +6,7 @@ import { createBlockbinContract } from '../util/ethereum';
  * This returns a promise
  */
 const getCubeContent = function(hash) {
-  var getCubePromise = new Promise((resolve, reject) => {
+  return new Promise((resolve, reject) => {
     if (typeof window.web3 !== 'undefined') {
       var web3 = new window.Web3(window.web3.currentProvider);
       var contractInstance = createBlockbinContract(web3);
@@ -17,7 +17,6 @@ const getCubeContent = function(hash) {
     contractInstance.readCube.call(
       hash,
       function(error, result) {
-        console.log(error, result);
         if (error) {
           reject(error);
         } else {
@@ -26,7 +25,6 @@ const getCubeContent = function(hash) {
       }
     );
   });
-  return getCubePromise;
 };
 
 class Cube extends Component {
@@ -50,7 +48,7 @@ class Cube extends Component {
   render() {
     return (
       <div className="app-pagecontainer">
-          <h3 className="app-title">Cube@<span className="nerdy">{this.state.hash}</span></h3>
+          <h3 className="app-title nerdy">@{this.state.hash}</h3>
           <div className="cube-display nerdy">
             {window.web3.toAscii(this.state.content)}
           </div>
