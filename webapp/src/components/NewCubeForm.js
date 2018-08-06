@@ -6,8 +6,8 @@ function SuccessBanner(props) {
   if (!props.successes || !props.successes.length) {
     return null;
   }
-  var successItems = props.successes.map(function(success){
-    return <li>{success}</li>;
+  var successItems = props.successes.map(function(success, index){
+    return <li key={index}>{success}</li>;
   });
   return (
     <div className="success">
@@ -20,8 +20,8 @@ function WarningBanner(props) {
   if (!props.errors || !props.errors.length) {
     return null;
   }
-  var errorItems = props.errors.map(function(error){
-    return <li>{error}</li>;
+  var errorItems = props.errors.map(function(error, index){
+    return <li key={index}>{error}</li>;
   });
   return (
     <div className="warning">
