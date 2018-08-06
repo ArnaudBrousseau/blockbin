@@ -6,6 +6,11 @@ module.exports = function(callback) {
   Blockbin.setProvider(web3.currentProvider);
 
   Blockbin.deployed().then(function(instance) {
-      console.log('Success! Blockbin has been deployed at: ' + instance.address); });
+    console.log('success!');
+    console.log('====Updated webapp/.env');
+    console.log("REACT_APP_CONTRACT_ADDRESS='" + instance.address + "'");
+    console.log("REACT_APP_BLOCKBIN_ABI='" + JSON.stringify(artifacts.abi) + "'");
+    console.log('=======================');
+  });
   callback();
 }
