@@ -10,7 +10,7 @@ function SuccessBanner(props) {
     return null;
   }
   var successItems = props.successes.map(function(success, index){
-    return <li key={index}>{success}</li>;
+    return <li key={index} dangerouslySetInnerHTML={{ __html: success }}></li>;
   });
   return (
     <div className="success">
@@ -24,7 +24,7 @@ function WarningBanner(props) {
     return null;
   }
   var errorItems = props.errors.map(function(error, index){
-    return <li key={index}>{error}</li>;
+    return <li key={index} dangerouslySetInnerHTML={{ __html: error }}></li>;
   });
   return (
     <div className="warning">
@@ -85,8 +85,8 @@ class NewCubeForm extends Component {
     })
 
     this.contractInstance.dumpCube.estimateGas(
-      this.state.cubeBytes,
-      this.state.contentHash,
+      cubeBytes,
+      contentHash,
       // TODO: seems like this has a lot of assumptions baked in
       // why would we grab the first available account?
       { from: this.web3.eth.accounts[0] },
@@ -127,7 +127,7 @@ class NewCubeForm extends Component {
       this.setState({
         successes: [
           ...this.state.successes,
-          'Saved!\nYour lookup hash is: ' + this.state.contentHash + '\nYour transaction id is: ' + result
+          'Saved!<br/><hr/>Cube hash: ' + this.state.contentHash + '<br/>TxID: ' + result + '<br/><strong><a href="/cube/' + this.state.contentHash + '">Cube Permalink</a></strong>'
         ]
       });
     } else {
