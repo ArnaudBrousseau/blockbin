@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { createBlockbinContract } from '../util/ethereum';
 
 /**
@@ -29,15 +29,39 @@ const getCubeContent = function(hash) {
   return getCubePromise;
 };
 
-const Cube = function(match) {
-  getCubeContent(match.match.params.cubeId)
-    .then(function(result) {alert(result); })
-    .catch(function(error) { console.error(error); });
-  return (
-    <div>
-      <h3>Cube: {match.match.params.cubeId}</h3>
-    </div>
-  );
+class Cube extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      content: 'Retrieving...',
+      hash: this.props.match.params.cubeId,
+      error: ''
+    };
+
+    getCubeContent(this.state.hash)
+      .then(function(result) {
+        this.setState({'content': result });
+      }.bind(this))
+      .catch(function(error) {
+        this.setState({'error': error});
+      }.bind(this));
+  }
+
+  render() {
+    return (
+      <div className="app-pagecontainer">
+          <h3>Cube <span className="nerdy">{this.state.hash}</span></h3>
+          <div className="cube nerdy">
+            {this.state.content}
+          </div>
+          <hr />
+          <div className="cube nerdy">
+            {window.web3.toAscii(this.state.content)}
+          </div>
+          <div className="cube-error">{this.state.error}</div>
+      </div>
+    )
+  }
 }
 
 export default Cube;
