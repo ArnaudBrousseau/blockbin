@@ -2,14 +2,30 @@ import React, { Component } from 'react';
 import { createBlockbinContract } from '../util/ethereum';
 
 
-function WarningBanner(props) {
-  if (!props.warn) {
+function SuccessBanner(props) {
+  if (!props.successes || !props.successes.length) {
     return null;
   }
+  var successItems = props.successes.map(function(success){
+    return <li>{success}</li>;
+  });
+  return (
+    <div className="success">
+      <ul>{successItems}</ul>
+    </div>
+  );
+}
 
+function WarningBanner(props) {
+  if (!props.errors || !props.errors.length) {
+    return null;
+  }
+  var errorItems = props.errors.map(function(error){
+    return <li>{error}</li>;
+  });
   return (
     <div className="warning">
-      Persisting content to the blockchain requires the use of Metamask to fuel the transaction with some ethereum. Go to https://metamask.io/ to install it then refresh this page.
+      <ul>{errorItems}</ul>
     </div>
   );
 }
@@ -22,7 +38,9 @@ class NewCubeForm extends Component {
       content: '',
       estimate: 'n/a',
       contentHash: 'n/a',
-      cubeBytes: '0x'
+      cubeBytes: '0x',
+      errors: [],
+      successes: [],
     };
 
     if (typeof window.web3 !== 'undefined') {
@@ -32,8 +50,12 @@ class NewCubeForm extends Component {
       this.web3 = new window.Web3(window.web3.currentProvider);
       this.contractInstance = createBlockbinContract(this.web3);
     } else {
-      this.web3 = undefined;
-      this.contractInstance = undefined;
+      this.setState({
+        errors: [
+          ...this.state.errors,
+          'Persisting content to the blockchain requires the use of Metamask to fuel the transaction with some ethereum. Go to https://metamask.io/ to install it then refresh this page.'
+        ]
+      })
     }
 
     this.handleChange = this.handleChange.bind(this);
@@ -68,8 +90,12 @@ class NewCubeForm extends Component {
     if (!error) {
       this.setState({estimate: result});
     } else {
-      console.error('not able to estimate gas. error msg: ' + error);
-      return;
+      this.setState({
+        errors: [
+          ...this.state.errors,
+          'Not able to estimate gas. error msg: ' + error
+        ]
+      });
     }
   };
 
@@ -90,17 +116,31 @@ class NewCubeForm extends Component {
 
   sendTransactionCb(error, result) {
     if (!error) {
-      alert('Saved!\nYour lookup hash is: ' + this.state.contentHash + '\nYour transaction id is: ' + result);
+      this.setState({
+        successes: [
+          ...this.state.successes,
+          'Saved!\nYour lookup hash is: ' + this.state.contentHash + '\nYour transaction id is: ' + result
+        ]
+      });
     } else {
-      console.error(error);
-      alert('Error in processing your transaction');
+      this.setState({
+        errors: [
+          ...this.state.errors,
+          'Error in processing your transaction: ' + error
+        ]
+      });
     }
   };
 
   render() {
+    if (this.web3 === undefined) {
+    }
     const doesNotHaveWeb3 = this.web3 === undefined;
     return (
       <form onSubmit={this.handleSubmit}>
+        <SuccessBanner successes={this.state.successes} />
+        <WarningBanner errors={this.state.errors} />
+
         <h3 className="app-title app-title-bigger">
           New Cube
         </h3>
@@ -110,8 +150,6 @@ class NewCubeForm extends Component {
           value={this.state.content}
           rows={10}
         />
-
-        <WarningBanner warn={doesNotHaveWeb3} />
 
         <h4 className="cube-info nerdy faded">Length: {(this.state.cubeBytes.length-2)/2} bytes</h4>
         <h4 className="cube-info nerdy faded">Gas estimate: {this.state.estimate}</h4>
