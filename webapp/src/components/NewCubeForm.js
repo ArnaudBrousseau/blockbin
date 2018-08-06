@@ -101,7 +101,7 @@ class NewCubeForm extends Component {
     const doesNotHaveWeb3 = this.web3 === undefined;
     return (
       <form onSubmit={this.handleSubmit}>
-        <h3 className="new-cube-title">
+        <h3 className="app-title app-title-bigger">
           New Cube
         </h3>
         <textarea
@@ -113,9 +113,9 @@ class NewCubeForm extends Component {
 
         <WarningBanner warn={doesNotHaveWeb3} />
 
-        <h4 className="cube-info nerdy">Length: {(this.state.cubeBytes.length-2)/2} bytes</h4>
-        <h4 className="cube-info nerdy">Gas estimate: {this.state.estimate}</h4>
-        <h4 className="cube-info nerdy">SHA3: {this.state.contentHash}</h4>
+        <h4 className="cube-info nerdy faded">Length: {(this.state.cubeBytes.length-2)/2} bytes</h4>
+        <h4 className="cube-info nerdy faded">Gas estimate: {this.state.estimate}</h4>
+        <h4 className="cube-info nerdy faded">SHA3: {this.state.contentHash}</h4>
 
         <button
           className="submit-button"

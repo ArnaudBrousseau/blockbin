@@ -69,8 +69,13 @@
   text-align: center;
 }
 
-.new-cube-title {
+.app-title {
   margin: 20px 0 10px 0;
+  font-size: 14px;
+}
+
+.app-title-bigger {
+  font-size: 18px;
 }
 
 .new-cube-textarea {
@@ -106,9 +111,18 @@
 
 .cube-info {
   font-size: 12px;
-  color: #666;
   margin: 0 0 0 10px;
 }
+
+.cube-display {
+  padding: 10px;
+  border-radius: 2px;
+  font-size: 14px;
+  border: 1px #666 solid;
+  margin-bottom: 10px;
+}
+
+.faded { color: #666; }
 
 .nerdy {
   font-family: Consolas, Courier, monospace;

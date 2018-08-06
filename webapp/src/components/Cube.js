@@ -50,13 +50,12 @@ class Cube extends Component {
   render() {
     return (
       <div className="app-pagecontainer">
-          <h3>Cube <span className="nerdy">{this.state.hash}</span></h3>
-          <div className="cube nerdy">
-            {this.state.content}
-          </div>
-          <hr />
-          <div className="cube nerdy">
+          <h3 className="app-title">Cube@<span className="nerdy">{this.state.hash}</span></h3>
+          <div className="cube-display nerdy">
             {window.web3.toAscii(this.state.content)}
+          </div>
+          <div className="cube-display nerdy faded">
+            {this.state.content}
           </div>
           <div className="cube-error">{this.state.error}</div>
       </div>
