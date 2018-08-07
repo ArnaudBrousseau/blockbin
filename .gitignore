@@ -3,6 +3,9 @@
 # dependencies
 node_modules
 
+# do not check-in dapp secrets in by mistake
+dapp/.env
+
 # production
 build
 

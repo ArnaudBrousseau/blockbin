@@ -84,7 +84,17 @@ Run `./bin/deploy-webapp`
 
 ### Smart contract
 
-TODO
+To deploy the contract to the Ropsten test network:
+
+* Create an Infura account
+* Create a Metamask account if you don't have one already
+* Provision your Ropsten network account with Ether. The easiest is to request 1 ETH from http://faucet.ropsten.be:3001/
+* Create a `dapp/.env` file with `METAMASK_DEN_MNEMONIC` set to your Metamask den mnemonic and `INFURA_ACCESS_TOKEN` set to your Infura access token. This file is used by `dapp/truffle.js`
+
+Once the above is done:
+
+    $ cd dapp
+    $ ./node_modules/.bin/truffle migrate --network ropsten
 
 ---
 
