@@ -1,3 +1,7 @@
+#root {
+  min-height: 100vh;
+}
+
 .app-pagecontainer {
   width: 616px;
   margin: 0 auto;
@@ -167,4 +171,10 @@
 }
 .success {
   background-color: #e0f9dc;
+}
+footer {
+  text-align: center;
+  font-size: 12px;
+  color: #999;
+  margin-top: 20px;
 }
