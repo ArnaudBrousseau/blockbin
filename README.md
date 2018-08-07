@@ -100,4 +100,4 @@ Once the above is done:
 
 ## Contributing
 
-See `TODO.md` file for requirements and things left to do.
+We're open and friendly! Check out [blockbin/issues](https://github.com/ArnaudBrousseau/blockbin/issues) and make a pull request!
