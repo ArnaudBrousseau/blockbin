@@ -1,4 +1,4 @@
-# Blockbin ![Build Status](https://travis-ci.org/ArnaudBrousseau/blockbin.svg?branch=master)
+# Blockbin [![Build Status](https://travis-ci.org/ArnaudBrousseau/blockbin.svg?branch=master)](https://travis-ci.org/ArnaudBrousseau/blockbin)
 
 * *Blockbin*: a website to let anybody store content in the Ethereum blockchain. It's a Paste*bin*-like app hosted on the Ethereum *block*chain. Hence "blockbin".
 * *Cube*: (also refered to as "qb") a blob stored via Blockbin on the Ethereum blockchain
