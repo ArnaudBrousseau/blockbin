@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import Web3 from 'web3';
 import { createBlockbinContract } from '../util/ethereum';
 
 const SUPPORTED_CODECS = {
@@ -46,11 +47,8 @@ class NewCubeForm extends Component {
       successes: [],
     };
 
-    if (typeof window.web3 !== 'undefined') {
-      // TODO: replace this with an imported version of web3
-      // e.g. import 'Web3' from 'web3'; new Web3(...)
-      // For some reason webpack makes this hard?
-      this.web3 = new window.Web3(window.web3.currentProvider);
+    if (Web3.givenProvider !== 'undefined') {
+      this.web3 = new Web3(Web3.givenProvider);
       this.contractInstance = createBlockbinContract(this.web3);
     } else {
       this.setState({
@@ -67,7 +65,7 @@ class NewCubeForm extends Component {
 
   encode(content, codec) {
     if (codec === SUPPORTED_CODECS.ASCII) {
-      return this.web3.fromAscii(content);
+      return Web3.utils.asciiToHex(content);
     } else {
       throw new Error('Unsupported codec: ' + codec);
     }
@@ -76,7 +74,7 @@ class NewCubeForm extends Component {
   handleChange(event) {
     const content = event.target.value;
     const cubeBytes = this.encode(content, this.state.codec)
-    const contentHash = this.web3.sha3(cubeBytes);
+    const contentHash = Web3.utils.sha3(cubeBytes);
 
     this.setState({
         content: content,
@@ -84,11 +82,7 @@ class NewCubeForm extends Component {
         contentHash: contentHash
     })
 
-    this.contractInstance.dumpCube.estimateGas(
-      cubeBytes,
-      contentHash,
-      // TODO: seems like this has a lot of assumptions baked in
-      // why would we grab the first available account?
+    this.contractInstance.methods.dumpCube(cubeBytes, contentHash).estimateGas(
       { from: this.web3.eth.accounts[0] },
       this.estimateGasCb.bind(this)
     );
@@ -110,16 +104,21 @@ class NewCubeForm extends Component {
   handleSubmit(event) {
     event.preventDefault();
 
-    this.contractInstance.dumpCube.sendTransaction(
-      this.state.cubeBytes,
-      this.state.contentHash,
-      {
-        // Metamask uses accounts[0] to pass the preferred account
-        from: this.web3.eth.accounts[0],
-        gas: this.state.estimate,
-      },
-      this.sendTransactionCb.bind(this)
-    );
+    this.web3.eth.getAccounts().then(function(accounts) {
+      this.contractInstance.methods.dumpCube(
+        this.state.cubeBytes,
+        this.state.contentHash
+      ).send(
+        {
+          // Metamask uses accounts[0] to pass the preferred account
+          from: accounts[0],
+          gas: this.state.estimate,
+        },
+        this.sendTransactionCb.bind(this)
+      );
+    }.bind(this)).catch(function(e) {
+      alert('Error when getting Metamask accounts: ' + e.toString());
+    });
   }
 
   sendTransactionCb(error, result) {

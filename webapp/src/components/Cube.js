@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import Web3 from 'web3';
 import { createBlockbinContract } from '../util/ethereum';
 
 /**
@@ -7,15 +8,9 @@ import { createBlockbinContract } from '../util/ethereum';
  */
 const getCubeContent = function(hash) {
   return new Promise((resolve, reject) => {
-    if (typeof window.web3 !== 'undefined') {
-      var web3 = new window.Web3(window.web3.currentProvider);
-      var contractInstance = createBlockbinContract(web3);
-    } else {
-      alert('cannot access web3. Did you install/enable Metamask?')
-      return;
-    }
-    contractInstance.readCube.call(
-      hash,
+    var web3 = new Web3(Web3.givenProvider || 'http://localhost:8545');
+    var contractInstance = createBlockbinContract(web3);
+    contractInstance.methods.readCube(hash).call(
       function(error, result) {
         if (error) {
           reject(error);
@@ -32,16 +27,20 @@ class Cube extends Component {
     super(props);
     this.state = {
       content: 'Retrieving...',
+      contextAscii: 'Retrieving...',
       hash: this.props.match.params.cubeId,
       error: ''
     };
 
     getCubeContent(this.state.hash)
       .then(function(result) {
-        this.setState({'content': result });
+        this.setState({
+          'content': result,
+          'contentAscii': Web3.utils.hexToAscii(result)
+        });
       }.bind(this))
       .catch(function(error) {
-        this.setState({'error': error});
+        this.setState({'error': error.toString()});
       }.bind(this));
   }
 
@@ -55,7 +54,7 @@ class Cube extends Component {
           </div>
           <div className="cube-display nerdy">
             <span className="cube-display-codec faded">ASCII</span>
-            {window.web3.toAscii(this.state.content)}
+            {this.state.contentAscii}
           </div>
           <div className="cube-error">{this.state.error}</div>
       </div>
