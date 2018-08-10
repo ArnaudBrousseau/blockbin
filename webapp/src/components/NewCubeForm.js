@@ -182,16 +182,17 @@ class NewCubeForm extends Component {
   }
 
   render() {
+    var gasLimit = new BigNumber(this.state.estimate).multipliedBy(2);
     var totalEstimateETH = new BigNumber(
       this.web3.utils.fromWei(
-        (new BigNumber(this.state.gasPrice) * new BigNumber(this.state.estimate)).toString(),
+        new BigNumber(this.state.gasPrice).multipliedBy(gasLimit).toString(),
         'gwei'
        )
     );
     var totalEstimateUSD = new BigNumber(
       new BigNumber(
         this.web3.utils.fromWei(
-          (new BigNumber(this.state.gasPrice) * new BigNumber(this.state.estimate)).toString(),
+          new BigNumber(this.state.gasPrice).multipliedBy(gasLimit).toString(),
           'ether'
         )
       ) * new BigNumber(this.state.ethPrice)
@@ -219,9 +220,9 @@ class NewCubeForm extends Component {
           rows={10}
         />
 
-        <h4 className="cube-info nerdy faded">Length: {(this.state.cubeBytes.length-2)/2} bytes</h4>
         <h4 className="cube-info nerdy faded">Hash: {this.state.contentHash}</h4>
-        <h4 className="cube-info nerdy faded">Gas estimate: {this.state.estimate}</h4>
+        <h4 className="cube-info nerdy faded">Length: {(this.state.cubeBytes.length-2)/2} bytes</h4>
+        <h4 className="cube-info nerdy faded">Gas limit: {gasLimit.toFormat()} (twice the estimate of {this.state.estimate})</h4>
         <h4 className="cube-info nerdy faded">Gas price: {Web3.utils.fromWei(this.state.gasPrice, 'gwei')} Gwei</h4>
         <h4 className="cube-info nerdy faded">Total: {totalEstimateETH.precision(6).toFormat()} ETH (approx. {totalEstimateUSD.precision(6).toFormat()} USD)</h4>
 
