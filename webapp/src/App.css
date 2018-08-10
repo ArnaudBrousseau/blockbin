@@ -167,6 +167,11 @@
   font-size: 12px;
 }
 
+.cube-display-error {
+  background: #fbd8d8;
+  color: #ab1414;
+}
+
 .faded { color: #666; }
 
 .nerdy {

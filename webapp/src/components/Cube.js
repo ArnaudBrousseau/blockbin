@@ -7,19 +7,9 @@ import { createBlockbinContract } from '../util/ethereum';
  * This returns a promise
  */
 const getCubeContent = function(hash) {
-  return new Promise((resolve, reject) => {
-    var web3 = new Web3(Web3.givenProvider || 'http://localhost:8545');
-    var contractInstance = createBlockbinContract(web3);
-    contractInstance.methods.readCube(hash).call(
-      function(error, result) {
-        if (error) {
-          reject(error);
-        } else {
-          resolve(result);
-        }
-      }
-    );
-  });
+  var web3 = new Web3(Web3.givenProvider || 'http://localhost:8545');
+  var contractInstance = createBlockbinContract(web3);
+  return contractInstance.methods.readCube(hash).call();
 };
 
 class Cube extends Component {
@@ -27,20 +17,32 @@ class Cube extends Component {
     super(props);
     this.state = {
       content: 'Retrieving...',
-      contextAscii: 'Retrieving...',
+      contentAscii: 'Retrieving...',
       hash: this.props.match.params.cubeId,
       error: ''
     };
 
     getCubeContent(this.state.hash)
       .then(function(result) {
-        this.setState({
-          'content': result,
-          'contentAscii': Web3.utils.hexToAscii(result)
+        if(result !== null) {
+          this.setState({
+            'content': result,
+            'contentAscii': Web3.utils.hexToAscii(result)
+          });
+        } else {
+          this.setState({
+            'content': 'Empty!',
+            'contentAscii': 'Empty!',
+            'error': 'This cube does not exist. Maybe it\'s still being mined?'
         });
+        }
       }.bind(this))
       .catch(function(error) {
-        this.setState({'error': error.toString()});
+        this.setState({
+          'content': 'Error while fetching this cube',
+          'contentAscii': 'Error while fetching this cube',
+          'error': error.toString()
+        });
       }.bind(this));
   }
 
@@ -56,7 +58,7 @@ class Cube extends Component {
             <span className="cube-display-codec faded">ASCII</span>
             {this.state.contentAscii}
           </div>
-          <div className="cube-error">{this.state.error}</div>
+          <div className="cube-display-error">{this.state.error}</div>
       </div>
     )
   }
