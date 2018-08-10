@@ -47,6 +47,10 @@ class Cube extends Component {
   }
 
   render() {
+    if (this.state.error) {
+      var error = <div className="cube-display-error">{this.state.error}</div>
+    }
+
     return (
       <div className="app-pagecontainer">
           <h3 className="app-title nerdy">@{this.state.hash}</h3>
@@ -58,7 +62,7 @@ class Cube extends Component {
             <span className="cube-display-codec faded">ASCII</span>
             {this.state.contentAscii}
           </div>
-          <div className="cube-display-error">{this.state.error}</div>
+          {error}
       </div>
     )
   }
