@@ -170,6 +170,7 @@
 .cube-display-error {
   background: #fbd8d8;
   color: #ab1414;
+  padding: 10px;
 }
 
 .faded { color: #666; }
