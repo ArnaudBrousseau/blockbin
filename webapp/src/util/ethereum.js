@@ -10,4 +10,21 @@ var createBlockbinContract = function(web3) {
     return contract;
 };
 
-export { createBlockbinContract };
+/**
+ * contractNetwork can be "main" for main network, "morden" for the morden test
+ * network, "ropsten" for the ropsten test network or "private" for undetectable
+ * networks.
+ * contractAddress is in the form '0x...'
+ */
+var getContractURL = function(contractAddress, contractNetwork) {
+  switch (contractNetwork) {
+    case 'ropsten':
+      return 'https://ropsten.etherscan.io/address/' + contractAddress;
+    case 'main':
+      return 'https://etherscan.io/address/' + contractAddress;
+    default:
+      return '#';
+  }
+}
+
+export { createBlockbinContract, getContractURL };

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 
 import ShowCubeForm from './ShowCubeForm';
+import MetamaskStatus from './MetamaskStatus';
 
 class Header extends Component {
   render() {
@@ -11,6 +12,9 @@ class Header extends Component {
             <h1 className="header-title">Blockbin</h1>
           </a>
           <ShowCubeForm />
+        </div>
+        <div className="metamask-status-container">
+          <MetamaskStatus />
         </div>
       </header>
     );

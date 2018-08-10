@@ -9,6 +9,7 @@ module.exports = function(callback) {
     console.log('success!');
     console.log('====Updated webapp/.env');
     console.log("REACT_APP_CONTRACT_ADDRESS='" + instance.address + "'");
+    console.log("REACT_APP_CONTRACT_NETWORK='private'");
     console.log("REACT_APP_BLOCKBIN_ABI='" + JSON.stringify(artifacts.abi) + "'");
     console.log('=======================');
   });

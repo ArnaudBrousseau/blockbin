@@ -47,7 +47,7 @@ class NewCubeForm extends Component {
       successes: [],
     };
 
-    if (Web3.givenProvider !== 'undefined') {
+    if (Web3.givenProvider) {
       this.web3 = new Web3(Web3.givenProvider);
       this.contractInstance = createBlockbinContract(this.web3);
     } else {
