@@ -162,43 +162,62 @@ class NewCubeForm extends Component {
   };
 
   componentDidMount() {
-    this.web3.eth.getGasPrice(this.getGasPriceCb.bind(this));
-    fetch('https://api.coinmarketcap.com/v1/ticker/ethereum/')
-      .then((response) => response.json())
-      .then((responseJson) => {
-        this.setState({
-          ethPrice: responseJson[0]['price_usd']
+    if (this.state.content.length && this.web3) {
+      this.web3.eth.getGasPrice(this.getGasPriceCb.bind(this));
+      fetch('https://api.coinmarketcap.com/v1/ticker/ethereum/')
+        .then((response) => response.json())
+        .then((responseJson) => {
+          this.setState({
+            ethPrice: responseJson[0]['price_usd']
+          });
+        })
+        .catch((error) => {
+          console.error(error);
+          this.setState({
+            errors: [
+              ...this.state.errors,
+              'Error in processing your transaction: ' + error
+            ]
+          });
         });
-      })
-      .catch((error) => {
-        console.error(error);
-        this.setState({
-          errors: [
-            ...this.state.errors,
-            'Error in processing your transaction: ' + error
-          ]
-        });
-      });
+    }
   }
 
   render() {
-    var gasLimit = new BigNumber(this.state.estimate).multipliedBy(2);
-    var totalEstimateETH = new BigNumber(
-      this.web3.utils.fromWei(
-        new BigNumber(this.state.gasPrice).multipliedBy(gasLimit).toString(),
-        'gwei'
-       )
-    );
-    var totalEstimateUSD = new BigNumber(
-      new BigNumber(
+    var cubeInfo;
+    if (this.state.content.length && this.web3) {
+      var gasLimit = new BigNumber(this.state.estimate).multipliedBy(2);
+      var totalEstimateETH = new BigNumber(
         this.web3.utils.fromWei(
           new BigNumber(this.state.gasPrice).multipliedBy(gasLimit).toString(),
-          'ether'
-        )
-      ) * new BigNumber(this.state.ethPrice)
-    )
+          'gwei'
+         )
+      );
+      var totalEstimateUSD = new BigNumber(
+        new BigNumber(
+          this.web3.utils.fromWei(
+            new BigNumber(this.state.gasPrice).multipliedBy(gasLimit).toString(),
+            'ether'
+          )
+        ) * new BigNumber(this.state.ethPrice)
+      );
 
-    var doesNotHaveWeb3 = this.web3 === undefined;
+      cubeInfo = <div>
+        <h4 className="cube-info nerdy faded">Hash: {this.state.contentHash}</h4>
+        <h4 className="cube-info nerdy faded">Length: {(this.state.cubeBytes.length-2)/2} bytes</h4>
+        <h4 className="cube-info nerdy faded">Gas limit: {gasLimit.toFormat()} (twice the estimate of {this.state.estimate})</h4>
+        <h4 className="cube-info nerdy faded">Gas price: {Web3.utils.fromWei(this.state.gasPrice, 'gwei')} Gwei</h4>
+        <h4 className="cube-info nerdy faded">Total: {totalEstimateETH.precision(6).toFormat()} ETH (approx. {totalEstimateUSD.precision(6).toFormat()} USD)</h4>
+        <button
+          className="submit-button"
+        >
+          Mine to blockchain
+        </button>
+      </div>
+    } else {
+      cubeInfo = null
+    }
+
     return (
       <form onSubmit={this.handleSubmit}>
         <SuccessBanner successes={this.state.successes} />
@@ -219,19 +238,7 @@ class NewCubeForm extends Component {
           value={this.state.content}
           rows={10}
         />
-
-        <h4 className="cube-info nerdy faded">Hash: {this.state.contentHash}</h4>
-        <h4 className="cube-info nerdy faded">Length: {(this.state.cubeBytes.length-2)/2} bytes</h4>
-        <h4 className="cube-info nerdy faded">Gas limit: {gasLimit.toFormat()} (twice the estimate of {this.state.estimate})</h4>
-        <h4 className="cube-info nerdy faded">Gas price: {Web3.utils.fromWei(this.state.gasPrice, 'gwei')} Gwei</h4>
-        <h4 className="cube-info nerdy faded">Total: {totalEstimateETH.precision(6).toFormat()} ETH (approx. {totalEstimateUSD.precision(6).toFormat()} USD)</h4>
-
-        <button
-          className="submit-button"
-          disabled={doesNotHaveWeb3 ? 'disabled' : ''}
-        >
-          Mine to blockchain
-        </button>
+        {cubeInfo}
       </form>
     );
   }
