@@ -9,7 +9,6 @@
 
 .header {
   display: block;
-  box-shadow: 0px 2px 2px 0px rgba(0,0,0,0.3);
   padding: 8px 0;
   position: relative;
   margin-bottom: 35px; /* to make room for the Metamask status bar */
@@ -23,6 +22,7 @@
 }
 
 .metamask-status-container {
+  box-shadow: inset 0 2px 2px 0 rgba(0,0,0,.3);
   background: #ececec;
   color: #666;
   font-size: 12px;
@@ -33,7 +33,6 @@
   position: absolute;
   top: 56px;
   width: 100%;
-  z-index: -1;
 }
 .metamask-status-container p { margin: 0 }
 .metamask-status-container a { color: #666 }
