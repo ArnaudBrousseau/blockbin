@@ -1,10 +1,15 @@
 import React, { Component } from 'react';
 import Web3 from 'web3';
+import {BigNumber} from 'bignumber.js';
 import { createBlockbinContract } from '../util/ethereum';
 
 const SUPPORTED_CODECS = {
   'ASCII': 'ascii'
 };
+
+const TWO_GWEI_IN_WEI = '2000000000';
+const DEFAULT_ETH_PRICE = '500';
+const DEFAULT_ESTIMATE = '21000';
 
 function SuccessBanner(props) {
   if (!props.successes || !props.successes.length) {
@@ -40,7 +45,9 @@ class NewCubeForm extends Component {
     this.state = {
       content: '',
       codec: SUPPORTED_CODECS.ASCII,
-      estimate: 'n/a',
+      estimate: DEFAULT_ESTIMATE,
+      gasPrice: TWO_GWEI_IN_WEI,
+      ethPrice: DEFAULT_ETH_PRICE,
       contentHash: 'n/a',
       cubeBytes: '0x',
       errors: [],
@@ -82,10 +89,24 @@ class NewCubeForm extends Component {
         contentHash: contentHash
     })
 
+
     this.contractInstance.methods.dumpCube(cubeBytes, contentHash).estimateGas(
       { from: this.web3.eth.accounts[0] },
       this.estimateGasCb.bind(this)
     );
+  }
+
+  getGasPriceCb(error, result) {
+    if (!error) {
+      this.setState({gasPrice: result});
+    } else {
+      this.setState({
+        errors: [
+          ...this.state.errors,
+          'Not able to estimate gasPrice! error msg: ' + error
+        ]
+      });
+    }
   }
 
   estimateGasCb(error, result) {
@@ -113,6 +134,7 @@ class NewCubeForm extends Component {
           // Metamask uses accounts[0] to pass the preferred account
           from: accounts[0],
           gas: this.state.estimate,
+          gasPrice: this.state.gasPrice,
         },
         this.sendTransactionCb.bind(this)
       );
@@ -139,10 +161,43 @@ class NewCubeForm extends Component {
     }
   };
 
+  componentDidMount() {
+    this.web3.eth.getGasPrice(this.getGasPriceCb.bind(this));
+    fetch('https://api.coinmarketcap.com/v1/ticker/ethereum/')
+      .then((response) => response.json())
+      .then((responseJson) => {
+        this.setState({
+          ethPrice: responseJson[0]['price_usd']
+        });
+      })
+      .catch((error) => {
+        console.error(error);
+        this.setState({
+          errors: [
+            ...this.state.errors,
+            'Error in processing your transaction: ' + error
+          ]
+        });
+      });
+  }
+
   render() {
-    if (this.web3 === undefined) {
-    }
-    const doesNotHaveWeb3 = this.web3 === undefined;
+    var totalEstimateETH = new BigNumber(
+      this.web3.utils.fromWei(
+        (new BigNumber(this.state.gasPrice) * new BigNumber(this.state.estimate)).toString(),
+        'gwei'
+       )
+    );
+    var totalEstimateUSD = new BigNumber(
+      new BigNumber(
+        this.web3.utils.fromWei(
+          (new BigNumber(this.state.gasPrice) * new BigNumber(this.state.estimate)).toString(),
+          'ether'
+        )
+      ) * new BigNumber(this.state.ethPrice)
+    )
+
+    var doesNotHaveWeb3 = this.web3 === undefined;
     return (
       <form onSubmit={this.handleSubmit}>
         <SuccessBanner successes={this.state.successes} />
@@ -165,8 +220,10 @@ class NewCubeForm extends Component {
         />
 
         <h4 className="cube-info nerdy faded">Length: {(this.state.cubeBytes.length-2)/2} bytes</h4>
-        <h4 className="cube-info nerdy faded">Gas estimate: {this.state.estimate}</h4>
         <h4 className="cube-info nerdy faded">Hash: {this.state.contentHash}</h4>
+        <h4 className="cube-info nerdy faded">Gas estimate: {this.state.estimate}</h4>
+        <h4 className="cube-info nerdy faded">Gas price: {Web3.utils.fromWei(this.state.gasPrice, 'gwei')} Gwei</h4>
+        <h4 className="cube-info nerdy faded">Total: {totalEstimateETH.precision(6).toFormat()} ETH (approx. {totalEstimateUSD.precision(6).toFormat()} USD)</h4>
 
         <button
           className="submit-button"
