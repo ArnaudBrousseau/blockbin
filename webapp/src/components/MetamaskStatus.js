@@ -7,7 +7,7 @@ class MetamaskStatus extends Component {
   constructor(props) {
     super(props);
 
-    var contractAddress = process.env.REACT_APP_CONTRACT_ADDRESS.substr(0, 10);
+    var contractAddress = process.env.REACT_APP_CONTRACT_ADDRESS;
     var contractNetwork = process.env.REACT_APP_CONTRACT_NETWORK;
     var contractURL = getContractURL(contractAddress, contractNetwork);
 
@@ -49,7 +49,7 @@ class MetamaskStatus extends Component {
     } else {
       return (
         <p className="metamask-status">
-          Smart contract deployed at <a href={this.state.contractURL}>{this.state.contractAddress}</a> (<strong>{this.state.contractNetwork}</strong>) —
+          Smart contract deployed at <a href={this.state.contractURL} target="_blank">{this.state.contractAddress.substr(0,10)}</a> (<strong>{this.state.contractNetwork}</strong>) —
           Metamask connected to <strong>{this.state.metamaskNetwork}</strong>.
         </p>
       );
