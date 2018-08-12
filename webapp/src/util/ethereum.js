@@ -18,12 +18,21 @@ var createBlockbinContract = function(web3) {
  * networks.
  * contractAddress is in the form '0x...'
  */
-var getContractURL = function(contractAddress, contractNetwork) {
+var getEtherscanURL = function(contractAddress, contractNetwork, type) {
+  var typePathParam;
+  if (type === 'transaction') {
+    typePathParam = 'tx';
+  } else if (type === 'address') {
+    typePathParam = 'address';
+  } else {
+    throw new Error('Unsupported type: ' + type + '. Expected "transaction" or "address"');
+  }
+
   switch (contractNetwork) {
     case 'ropsten':
-      return 'https://ropsten.etherscan.io/address/' + contractAddress;
+      return 'https://ropsten.etherscan.io/' + typePathParam + '/' + contractAddress;
     case 'main':
-      return 'https://etherscan.io/address/' + contractAddress;
+      return 'https://etherscan.io/' + typePathParam + '/' + contractAddress;
     default:
       return '#';
   }
@@ -38,4 +47,4 @@ var createWeb3 = function() {
   );
 }
 
-export { createBlockbinContract, createWeb3, getContractURL };
+export { createBlockbinContract, createWeb3, getEtherscanURL };

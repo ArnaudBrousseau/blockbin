@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { getContractURL } from '../util/ethereum';
+import { getEtherscanURL } from '../util/ethereum';
 import Web3 from 'web3';
 
 
@@ -9,7 +9,7 @@ class MetamaskStatus extends Component {
 
     var contractAddress = process.env.REACT_APP_CONTRACT_ADDRESS;
     var contractNetwork = process.env.REACT_APP_CONTRACT_NETWORK;
-    var contractURL = getContractURL(contractAddress, contractNetwork);
+    var contractURL = getEtherscanURL(contractAddress, contractNetwork, 'address');
 
     this.state = {
       metamaskNetwork: 'Fetching...',

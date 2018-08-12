@@ -1,25 +1,11 @@
 import React, { Component } from 'react';
 import Web3 from 'web3';
 import {BigNumber} from 'bignumber.js';
-import { createBlockbinContract, createWeb3 } from '../util/ethereum';
+import { createBlockbinContract, createWeb3, getEtherscanURL } from '../util/ethereum';
 
 const SUPPORTED_CODECS = {
   'ASCII': 'ascii'
 };
-
-function SuccessBanner(props) {
-  if (!props.successes || !props.successes.length) {
-    return null;
-  }
-  var successItems = props.successes.map(function(success, index){
-    return <li key={index} dangerouslySetInnerHTML={{ __html: success }}></li>;
-  });
-  return (
-    <div className="success">
-      <ul>{successItems}</ul>
-    </div>
-  );
-}
 
 function WarningBanner(props) {
   if (!props.errors || !props.errors.length) {
@@ -47,6 +33,8 @@ class NewCubeForm extends Component {
       ethPrice: null,
       contentHash: null,
       cubeBytes: null,
+      successHash: null,
+      successTransactionId: null,
       errors: [],
       successes: [],
     };
@@ -137,10 +125,8 @@ class NewCubeForm extends Component {
   sendTransactionCb(error, result) {
     if (!error) {
       this.setState({
-        successes: [
-          ...this.state.successes,
-          'Saved!<br/><hr/>Cube hash: ' + this.state.contentHash + '<br/>TxID: ' + result + '<br/><strong><a href="/cube/' + this.state.contentHash + '">Cube Permalink</a></strong>'
-        ]
+        successHash: this.state.contentHash,
+        successTransactionId: result,
       });
     } else {
       this.setState({
@@ -197,7 +183,7 @@ class NewCubeForm extends Component {
         <h4 className="cube-info nerdy faded">Length: {(this.state.cubeBytes.length-2)/2} bytes</h4>
         <h4 className="cube-info nerdy faded">Gas limit: {this.state.gasLimit.toFormat()} (twice the estimate of {this.state.estimate})</h4>
         <h4 className="cube-info nerdy faded">Gas price: {Web3.utils.fromWei(this.state.gasPrice, 'gwei')} Gwei</h4>
-        <h4 className="cube-info nerdy faded">Total: {totalEstimateETH.precision(6).toFormat()} ETH (approx. {totalEstimateUSD.precision(6).toFormat()} USD)</h4>
+        <h4 className="cube-info nerdy faded">Max Total: {totalEstimateETH.precision(6).toFormat()} ETH (approx. {totalEstimateUSD.precision(6).toFormat()} USD)</h4>
         <button
           className="submit-button"
         >
@@ -222,10 +208,32 @@ class NewCubeForm extends Component {
       </div>
     }
 
+    var successBanner;
+    if (this.state.successHash && this.state.successTransactionId) {
+    var cubeURL = '/cube/' + this.state.successHash;
+    var transactionURL = getEtherscanURL(
+      this.state.successTransactionId,
+      process.env.REACT_APP_CONTRACT_NETWORK,
+      'transaction'
+    );
+    successBanner = <div className="success">
+      Transaction sent! <br/>
+      (<a target="_blank" href={transactionURL}>{this.state.successTransactionId}</a>)
+      <hr/>
+      Cube permalink <strong>(save it somewhere!)</strong>: <br/>
+      <span className="ellipsis">
+        &rarr; <a target="_blank" href={cubeURL}>blockbin.io{cubeURL}</a>
+      </span>
+      <br/>
+      <small>Note: this link will work once the transaction gets mined into an Ethereum block. This operation can take several minutes, and Metamask should notify you when it completes. You can view <a href={transactionURL} target="_blank">your transaction on Etherscan</a> for more information.</small>
+    </div>
+    } else {
+      successBanner = null;
+    }
 
     return (
       <form onSubmit={this.handleSubmit}>
-        <SuccessBanner successes={this.state.successes} />
+        {successBanner}
         <WarningBanner errors={this.state.errors} />
 
         <h3 className="app-title app-title-bigger">

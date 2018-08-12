@@ -180,23 +180,34 @@
   font-weight: 700;
 }
 
+.ellipsis {
+  display: block;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
 .warning, .success {
   border-radius: 2px;
   font-size: 14px;
   padding: 10px;
   margin-top: 20px;
 }
+
 .warning ul, .success ul {
   margin: 0;
   padding: 0;
   list-style: none;
 }
+
 .warning {
   background-color: #f9dcdc;
 }
+
 .success {
   background-color: #e0f9dc;
 }
+
 footer {
   text-align: center;
   font-size: 12px;
