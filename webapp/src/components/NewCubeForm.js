@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import Web3 from 'web3';
 import {BigNumber} from 'bignumber.js';
-import { createBlockbinContract } from '../util/ethereum';
+import { createBlockbinContract, createWeb3 } from '../util/ethereum';
 
 const SUPPORTED_CODECS = {
   'ASCII': 'ascii'
@@ -54,18 +54,9 @@ class NewCubeForm extends Component {
       successes: [],
     };
 
-    if (Web3.givenProvider) {
-      this.web3 = new Web3(Web3.givenProvider);
-      this.contractInstance = createBlockbinContract(this.web3);
-    } else {
-      this.setState({
-        errors: [
-          ...this.state.errors,
-          'Persisting content to the blockchain requires the use of Metamask to fuel the transaction with some ethereum. Go to https://metamask.io/ to install it then refresh this page.'
-        ]
-      })
-    }
-
+    this.web3 = createWeb3();
+    this.contractInstance = createBlockbinContract(this.web3);
+    this.hasMetamask = this.web3.currentProvider.constructor.name === 'MetamaskInpageProvider';
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
@@ -185,7 +176,7 @@ class NewCubeForm extends Component {
 
   render() {
     var cubeInfo;
-    if (this.state.content.length && this.web3) {
+    if (this.state.content.length && this.hasMetamask) {
       var gasLimit = new BigNumber(this.state.estimate).multipliedBy(2);
       var totalEstimateETH = new BigNumber(
         this.web3.utils.fromWei(
@@ -218,6 +209,21 @@ class NewCubeForm extends Component {
       cubeInfo = null
     }
 
+    var textarea;
+    if (this.hasMetamask) {
+      textarea = <textarea
+          className="new-cube-textarea nerdy"
+          onChange={this.handleChange}
+          value={this.state.content}
+          rows={10}
+        />
+    } else {
+      textarea = <div className="cube-display-error">
+        Persisting content to the blockchain requires the use of Metamask to fuel the transaction with some ethereum. Go to <a href="https://metamask.io/">Metamask.io</a> to install it then refresh this page.
+      </div>
+    }
+
+
     return (
       <form onSubmit={this.handleSubmit}>
         <SuccessBanner successes={this.state.successes} />
@@ -232,12 +238,7 @@ class NewCubeForm extends Component {
               </select>
           </div>
         </h3>
-        <textarea
-          className="new-cube-textarea nerdy"
-          onChange={this.handleChange}
-          value={this.state.content}
-          rows={10}
-        />
+        {textarea}
         {cubeInfo}
       </form>
     );

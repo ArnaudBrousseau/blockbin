@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
 import Web3 from 'web3';
-import { createBlockbinContract } from '../util/ethereum';
+import { createBlockbinContract, createWeb3 } from '../util/ethereum';
 
 /**
  * hash is in the form '0x....'
  * This returns a promise
  */
 const getCubeContent = function(hash) {
-  var web3 = new Web3(Web3.givenProvider || 'http://localhost:8545');
+  var web3 = createWeb3();
   var contractInstance = createBlockbinContract(web3);
   return contractInstance.methods.readCube(hash).call();
 };
