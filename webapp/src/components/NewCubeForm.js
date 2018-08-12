@@ -7,10 +7,6 @@ const SUPPORTED_CODECS = {
   'ASCII': 'ascii'
 };
 
-const TWO_GWEI_IN_WEI = '2000000000';
-const DEFAULT_ETH_PRICE = '500';
-const DEFAULT_ESTIMATE = '21000';
-
 function SuccessBanner(props) {
   if (!props.successes || !props.successes.length) {
     return null;
@@ -45,11 +41,12 @@ class NewCubeForm extends Component {
     this.state = {
       content: '',
       codec: SUPPORTED_CODECS.ASCII,
-      estimate: DEFAULT_ESTIMATE,
-      gasPrice: TWO_GWEI_IN_WEI,
-      ethPrice: DEFAULT_ETH_PRICE,
-      contentHash: 'n/a',
-      cubeBytes: '0x',
+      estimate: null,
+      gasLimit: null,
+      gasPrice: null,
+      ethPrice: null,
+      contentHash: null,
+      cubeBytes: null,
       errors: [],
       successes: [],
     };
@@ -80,7 +77,7 @@ class NewCubeForm extends Component {
         contentHash: contentHash
     })
 
-
+    this.getGasAndEthPrices();
     this.contractInstance.methods.dumpCube(cubeBytes, contentHash).estimateGas(
       { from: this.web3.eth.accounts[0] },
       this.estimateGasCb.bind(this)
@@ -102,7 +99,10 @@ class NewCubeForm extends Component {
 
   estimateGasCb(error, result) {
     if (!error) {
-      this.setState({estimate: result});
+      this.setState({
+        estimate: result,
+        gasLimit: new BigNumber(result).multipliedBy(2)
+      });
     } else {
       this.setState({
         errors: [
@@ -124,7 +124,7 @@ class NewCubeForm extends Component {
         {
           // Metamask uses accounts[0] to pass the preferred account
           from: accounts[0],
-          gas: this.state.estimate,
+          gas: this.state.gasLimit,
           gasPrice: this.state.gasPrice,
         },
         this.sendTransactionCb.bind(this)
@@ -152,9 +152,15 @@ class NewCubeForm extends Component {
     }
   };
 
-  componentDidMount() {
-    if (this.state.content.length && this.web3) {
+  getGasAndEthPrices() {
+    if (this.gasPrice && this.ethPrice) {
+      return;
+    }
+    if (this.hasMetamask && this.state.content.length) {
+      // Gets current gas price
       this.web3.eth.getGasPrice(this.getGasPriceCb.bind(this));
+
+      // Gets current ETH price
       fetch('https://api.coinmarketcap.com/v1/ticker/ethereum/')
         .then((response) => response.json())
         .then((responseJson) => {
@@ -167,7 +173,7 @@ class NewCubeForm extends Component {
           this.setState({
             errors: [
               ...this.state.errors,
-              'Error in processing your transaction: ' + error
+              'Could not get ETH price: ' + error
             ]
           });
         });
@@ -176,27 +182,20 @@ class NewCubeForm extends Component {
 
   render() {
     var cubeInfo;
-    if (this.state.content.length && this.hasMetamask) {
+    if (this.state.content.length && this.hasMetamask && this.state.estimate && this.state.gasPrice && this.state.ethPrice) {
       var gasLimit = new BigNumber(this.state.estimate).multipliedBy(2);
       var totalEstimateETH = new BigNumber(
         this.web3.utils.fromWei(
           new BigNumber(this.state.gasPrice).multipliedBy(gasLimit).toString(),
-          'gwei'
+          'ether'
          )
       );
-      var totalEstimateUSD = new BigNumber(
-        new BigNumber(
-          this.web3.utils.fromWei(
-            new BigNumber(this.state.gasPrice).multipliedBy(gasLimit).toString(),
-            'ether'
-          )
-        ) * new BigNumber(this.state.ethPrice)
-      );
+      var totalEstimateUSD = totalEstimateETH.multipliedBy(new BigNumber(this.state.ethPrice));
 
       cubeInfo = <div>
         <h4 className="cube-info nerdy faded">Hash: {this.state.contentHash}</h4>
         <h4 className="cube-info nerdy faded">Length: {(this.state.cubeBytes.length-2)/2} bytes</h4>
-        <h4 className="cube-info nerdy faded">Gas limit: {gasLimit.toFormat()} (twice the estimate of {this.state.estimate})</h4>
+        <h4 className="cube-info nerdy faded">Gas limit: {this.state.gasLimit.toFormat()} (twice the estimate of {this.state.estimate})</h4>
         <h4 className="cube-info nerdy faded">Gas price: {Web3.utils.fromWei(this.state.gasPrice, 'gwei')} Gwei</h4>
         <h4 className="cube-info nerdy faded">Total: {totalEstimateETH.precision(6).toFormat()} ETH (approx. {totalEstimateUSD.precision(6).toFormat()} USD)</h4>
         <button
