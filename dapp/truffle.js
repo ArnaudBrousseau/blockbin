@@ -25,7 +25,14 @@ module.exports = {
       network_id: "3"
     },
     mainnet: {
-      provider: undefined, // TODO
+      provider: function() {
+        return new HDWalletProvider(
+          process.env.METAMASK_DEN_MNEMONIC,
+          "https://mainnet.infura.io/" + process.env.INFURA_ACCESS_TOKEN,
+        )
+      },
+      gasPrice: 2300000000, // Based on https://ethgasstation.info/
+      gas: 1000000,
       network_id: "1"
     }
   }

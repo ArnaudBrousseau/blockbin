@@ -1,5 +1,12 @@
 import Web3 from 'web3';
 
+const ETH_NETWORKS = {
+  'ROPSTEN': 'ropsten',
+  'MORDEN': 'morden',
+  'MAINNET': 'main',
+  'PRIVATE': 'private'
+};
+
 /**
  * Instantiates the Blockbin contract
  * Note: `process.env` is a bit magic. It's compiled out by Webpack and gets
@@ -29,9 +36,9 @@ var getEtherscanURL = function(contractAddress, contractNetwork, type) {
   }
 
   switch (contractNetwork) {
-    case 'ropsten':
+    case ETH_NETWORKS.ROPSTEN:
       return 'https://ropsten.etherscan.io/' + typePathParam + '/' + contractAddress;
-    case 'main':
+    case ETH_NETWORKS.MAINNET:
       return 'https://etherscan.io/' + typePathParam + '/' + contractAddress;
     default:
       return '#';

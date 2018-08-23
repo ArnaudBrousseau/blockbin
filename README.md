@@ -1,7 +1,7 @@
 # Blockbin [![Build Status](https://travis-ci.org/ArnaudBrousseau/blockbin.svg?branch=master)](https://travis-ci.org/ArnaudBrousseau/blockbin)
 
 * *Blockbin*: a website to let anybody store content in the Ethereum blockchain. It's a Paste*bin*-like app hosted on the Ethereum *block*chain. Hence "blockbin".
-* *Cube*: (also refered to as "qb") a blob stored via Blockbin on the Ethereum blockchain
+* *Cube*: a blob stored via Blockbin on the Ethereum blockchain
 
 ---
 
@@ -94,7 +94,16 @@ To deploy the contract to the Ropsten test network:
 Once the above is done:
 
     $ cd dapp
-    $ ./node_modules/.bin/truffle migrate --network ropsten
+    $ ./node_modules/.bin/truffle migrate --reset --network ropsten
+
+To deploy the contract to *Mainnet*, try deploying it to Ropsten first to minimize the chances of mistakes (see above). Once you've done that, provision your Mainnet account with Ether. The easiest is to send yourself some Ether via Coinbase. Then, when you're ready:
+
+    $ cd dapp
+    $ ./node_modules/.bin/truffle migrate --reset --network mainnet
+
+Congratulations, you've just spent some real money!
+
+Note: if the migration fails for some reason, you can retry but _omit the `--reset` flag_! Otherwise you'll spent useless money to perform the already-confirmed steps once again.
 
 ---
 
