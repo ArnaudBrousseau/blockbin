@@ -33,13 +33,13 @@
     "promise": "8.0.1",
     "raf": "^3.4.0",
     "react": "^16.0.0",
-    "react-dev-utils": "^4.1.0",
+    "react-dev-utils": "^4.2.3",
     "react-dom": "^16.0.0",
     "react-router-dom": "^4.3.1",
     "style-loader": "0.18.2",
     "sw-precache-webpack-plugin": "0.11.4",
     "url-loader": "0.5.9",
-    "web3": "^1.0.0-beta.35",
+    "web3": "^1.2.1",
     "webpack": "3.5.1",
     "webpack-dev-server": "2.8.2",
     "webpack-manifest-plugin": "1.2.1",
@@ -51,12 +51,7 @@
     "test": "node scripts/test.js --env=jsdom"
   },
   "devDependencies": {
-    "eslint": "^5.1.0",
-    "eslint-plugin-flowtype": "^2.50.0",
-    "eslint-plugin-import": "^2.13.0",
-    "eslint-plugin-jsx-a11y": "^5.1.1",
-    "eslint-plugin-react": "^7.10.0",
-    "serve": "^9.2.0"
+    "serve": "^11.1.0"
   },
   "jest": {
     "collectCoverageFrom": [
