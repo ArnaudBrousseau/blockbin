@@ -147,11 +147,11 @@ class NewCubeForm extends Component {
       this.web3.eth.getGasPrice(this.getGasPriceCb.bind(this));
 
       // Gets current ETH price
-      fetch('https://api.coinmarketcap.com/v1/ticker/ethereum/')
+      fetch('https://api.pro.coinbase.com/products/ETH-USD/ticker')
         .then((response) => response.json())
         .then((responseJson) => {
           this.setState({
-            ethPrice: responseJson[0]['price_usd']
+            ethPrice: responseJson['price']
           });
         })
         .catch((error) => {
